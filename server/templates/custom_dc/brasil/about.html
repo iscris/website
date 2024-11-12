@@ -1,0 +1,72 @@
+{#
+  Copyright 2022 Google LLC
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+#}
+
+{%- extends BASE_HTML -%}
+
+{% set main_id = 'about' %}
+{% set page_id = 'page-about' %}
+{% set title = 'About Us' %}
+{% set NAME = 'Brazil Data Commons' %}
+
+{% block head %}
+<link rel="stylesheet" href={{url_for('static', filename='css/static.min.css', t=config['VERSION'])}}>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>About Brazil Data Commons</h1>
+  <div style="padding: 2rem;">
+    <h2>Why Brazil Data Commons</h2>
+    <p>
+      Brazil Data Commons is an initiative that aims to highlight data related to Brazil within the Data Commons knowledge graph. 
+      This effort brings together public datasets issued by various Brazilian governmental entities, making them accessible via 
+      the DC knowledge Graph. Brazil Data Commons is powered by Data Commons.
+    </p>
+    <p>
+      To address modern critical challenges, such as climate change or the Covid-19 pandemic, research must be grounded in solid 
+      data analysis. A lot of the data needed by specialists from different areas is already available online from reliable 
+      sources, but there is a significant gap between data being available and being easily usable. 
+      Data Commons has emerged from the urgency to organize and make the access to all kinds of information easy for those 
+      who need it.
+    </p>
+    <p>
+      Data Commons synthesizes a single graph from these different data sources. It links references to the same entities 
+      (such as cities, counties, organizations, etc.) across different datasets to nodes on the graph, so that users can 
+      access data about a particular entity aggregated from different sources without data cleaning or joining. We hope the 
+      data contained within Data Commons will be useful to students, researchers, and enthusiasts across different disciplines.
+    </p>
+  </div>
+  <div style="padding: 2rem;">
+    <h2>Who can use it?</h2>
+    <p>
+      Brazil Data Commons can be accessed by anyone via the tools available on
+      <a href="/">brazildatacommons.com.br</a>. Students, researchers and developers can use the
+      <a href="https://docs.datacommons.org/api/" target="_blank">REST, Python and Google Sheets APIs</a>, all of which are free for educational,
+      academic and journalistic research purposes.
+    </p>
+  </div>
+  <div style="padding: 2rem;" id="contribute">
+    <h2>Contributing to Brazil Data Commons</h2>
+    <p>
+      As of now, we are not accepting external contributions. However, we are working on revising our internal protocols 
+      and will begin welcoming collaborators soon. Stay tuned for updates!
+    </p>
+  </div>
+
+  <div style="padding: 2rem;">
+    <p>For more information on Data Commons project, please visit <a href="https://datacommons.org/about" target="_blank">this page</a>.</p>
+  </div>
+  {% endblock %}

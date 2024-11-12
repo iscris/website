@@ -1,0 +1,258 @@
+{#
+ Copyright 2022 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+#}
+{%- extends BASE_HTML -%}
+
+{% set main_id = 'homepage' %}
+{% set page_id = 'page-homepage' %}
+{% set title = 'Home' %}
+{% set NAME = 'IITM Data Commons' %}
+{% set is_hide_full_footer = false %}
+{% set is_hide_sub_footer = false %}
+{% set is_homepage = true %}
+
+{% block head %}
+<link rel="stylesheet" href={{url_for('static', filename='css/static.min.css', t=config['VERSION'])}}>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+{% endblock %}
+
+{% block content %}
+
+<style>
+  #iitm-india .main-content {
+    margin:0!important;
+  }
+
+  @media (min-width: 992px) {
+    #mainNav .navbar-nav > li.nav-item > a.nav-link, #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+      color: hsla(0,0%,100%,.9);
+    }
+    #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link, #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus {
+      color: #294969;
+    }
+  }
+
+  @media (min-width: 1200px) {
+      .container, .container-lg, .container-md, .container-sm, .container-xl {
+          max-width: 1400px;
+      }
+  }
+
+  #iitm-india #mainNav .navbar-nav > li.nav-item > a.nav-link, #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+    font-size: .9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: .5rem 1rem;
+  }
+
+  #iitm-india #main-footer {
+    margin-top:0!important;
+  }
+
+  #iitm-india {
+    overflow-x: hidden;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+
+</style>
+
+<header id="hero" class="masthead text-white d-flex justify-content-center align-items-center" style="background: linear-gradient(151deg, #5fb1e5, #0c569c);">
+    <div class="row container">
+        <div class="col-lg-6 d-flex" data-aos="zoom-in" data-aos-delay="100">
+            <div style="margin:auto auto">
+                <h1>Brazil Data Commons</h1><br/>
+                <div class="pre-line">
+                <h4 class="text-white">Brazil Data Commons provides Brazil-level data aggregated from a wide range of sources into a single portal under a common schema. Brazil Data Commons is powered by <a class="linked-text" href="https://datacommons.org/" target="_blank" >Data Commons</a></h4>
+                <a style="display:inline-block" href="/about" class="btn-know-more">Learn more</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 position-relative text-end india-network" data-aos="zoom-in" data-aos-delay="100" >
+            <div class="img-container float-right" style="max-width: 100%;">
+
+              <!--clipping SVG-->
+              <svg height="0" width="0" viewBox="0 0 450 450"  x="0" y="0" enable-background="new 0 0 450 450" xml:space="preserve" style="position: absolute;">
+                <defs>
+                  <!-- clipPathUnits="objectBoundingBox" -->
+                  <!-- stroke="black"  stroke-width="6" -->
+                  <clipPath id="header-clip-svg" >
+                    <path id="mypath" style="fill:none;stroke:#fff;stroke-width:1.0"  d="M 9.339844 149.816406 C 9.152344 152.257812 10.277344 154.042969 11.59375 155.917969 C 12.53125 157.328125 13.660156 158.921875 13.847656 160.519531 C 14.128906 163.148438 15.535156 163.804688 17.695312 164.273438 C 20.136719 164.839844 22.109375 166.152344 22.765625 168.78125 C 23.421875 171.222656 24.738281 171.878906 27.179688 170.941406 C 31.964844 169.15625 36.753906 167.1875 41.542969 165.308594 C 41.449219 165.871094 41.261719 166.714844 41.167969 167.5625 C 40.792969 170.941406 40.226562 174.320312 40.324219 177.605469 C 40.417969 181.082031 42.574219 183.238281 45.769531 183.238281 C 51.964844 183.238281 58.066406 183.144531 64.261719 182.957031 C 67.269531 182.863281 69.898438 181.738281 71.960938 179.390625 C 72.242188 179.109375 72.621094 178.640625 72.902344 178.734375 C 76.5625 179.390625 78.535156 176.855469 80.789062 174.695312 C 83.324219 172.253906 86.234375 170.566406 89.988281 170.660156 C 92.335938 170.753906 94.777344 170.003906 97.5 169.625 C 97.5 169.625 97.875 170.097656 98.15625 170.660156 C 99.472656 172.726562 100.035156 174.601562 98.4375 176.949219 C 97.6875 178.171875 98.0625 180.140625 97.96875 181.832031 C 97.875 183.050781 98.15625 184.460938 97.78125 185.585938 C 97.21875 187.371094 97.125 188.96875 97.875 190.75 C 99.941406 195.257812 103.132812 198.824219 106.886719 201.921875 C 108.953125 203.613281 111.207031 204.175781 113.835938 203.707031 C 114.679688 203.613281 115.714844 204.082031 116.558594 204.550781 C 117.683594 205.210938 118.53125 206.523438 119.65625 206.804688 C 121.347656 207.273438 122.472656 208.027344 123.503906 209.246094 C 124.914062 210.9375 126.699219 212.0625 128.953125 211.6875 C 130.640625 211.40625 131.390625 211.875 131.863281 213.566406 C 132.894531 217.132812 135.054688 218.164062 138.714844 217.320312 C 139.75 217.039062 141.15625 217.320312 142.1875 217.789062 C 144.535156 218.824219 146.695312 220.230469 148.949219 221.265625 C 150.453125 221.921875 151.203125 222.859375 151.390625 224.363281 C 151.671875 226.523438 151.859375 228.585938 151.859375 230.746094 C 151.765625 233.65625 152.140625 236.660156 149.605469 239.007812 C 149.230469 239.289062 149.042969 240.042969 149.042969 240.511719 C 149.324219 242.953125 149.792969 245.300781 151.765625 246.988281 C 155.050781 249.804688 158.902344 251.496094 163.21875 251.871094 C 165.097656 252.058594 167.070312 251.871094 169.039062 251.964844 C 171.574219 252.058594 172.421875 253.28125 171.761719 255.625 C 171.574219 256.191406 171.386719 256.847656 171.105469 257.410156 C 168.664062 262.386719 170.167969 265.671875 175.332031 267.269531 C 176.363281 267.644531 177.867188 268.769531 177.867188 269.519531 C 178.054688 273.464844 179.742188 277.6875 176.644531 281.351562 C 176.269531 281.726562 175.894531 282.195312 175.800781 282.761719 C 175.613281 283.792969 175.238281 285.105469 175.613281 285.949219 C 176.082031 286.984375 176.082031 287.546875 175.425781 288.394531 C 174.015625 290.269531 173.078125 292.148438 172.890625 294.589844 C 172.609375 299.566406 171.953125 304.542969 171.574219 309.519531 C 171.386719 311.957031 171.292969 314.492188 171.386719 316.933594 C 171.480469 319 172.609375 320.785156 174.675781 321.253906 C 177.492188 321.816406 180.402344 322.191406 183.21875 322.191406 C 190.824219 322.191406 196.457031 328.949219 195.140625 336.460938 C 194.765625 338.433594 194.859375 340.59375 194.953125 342.660156 C 195.046875 345.289062 195.890625 345.851562 198.519531 345.382812 C 199.742188 345.195312 200.960938 344.816406 202.183594 344.726562 C 205.1875 344.539062 207.347656 346.414062 206.972656 349.417969 C 206.59375 352.800781 205.9375 356.273438 204.8125 359.464844 C 203.589844 363.03125 203.308594 362.9375 206.40625 365.097656 C 209.507812 367.257812 210.726562 370.261719 210.257812 373.921875 C 209.976562 376.363281 209.316406 378.710938 209.222656 381.152344 C 209.128906 384.90625 206.59375 386.878906 203.777344 387.816406 C 196.175781 390.164062 190.351562 394.953125 184.71875 400.117188 C 181.246094 403.308594 178.242188 406.878906 175.050781 410.351562 C 173.265625 412.226562 173.171875 413.449219 174.582031 415.703125 C 174.957031 416.359375 175.332031 417.015625 175.800781 417.578125 C 178.054688 420.492188 180.964844 422.929688 180.027344 427.34375 C 179.648438 429.128906 180.964844 429.972656 182.75 429.410156 C 183.5 429.222656 184.15625 428.84375 184.8125 428.375 C 186.316406 427.34375 187.535156 427.90625 188.476562 429.035156 C 192.136719 433.632812 196.269531 437.578125 200.867188 441.050781 C 202.933594 442.554688 204.53125 444.523438 204.90625 447.058594 C 205.1875 449.21875 206.5 449.40625 208.191406 449.21875 C 209.789062 449.03125 211.289062 448.5625 212.980469 448.1875 C 214.011719 450.34375 215.609375 450.628906 217.109375 448.75 C 217.769531 447.90625 218.519531 446.964844 218.707031 445.933594 C 219.738281 441.707031 221.710938 438.234375 224.902344 435.230469 C 228 432.320312 230.722656 429.035156 233.730469 425.746094 C 233.917969 425.933594 234.292969 426.121094 234.574219 426.40625 C 236.917969 428.84375 239.640625 428.65625 241.425781 425.839844 C 242.460938 424.148438 243.492188 422.460938 244.335938 420.582031 C 245.839844 417.390625 248 415.042969 250.816406 412.976562 C 252.789062 411.472656 254.476562 409.597656 255.886719 407.625 C 258.136719 404.339844 258.890625 400.304688 259.359375 396.453125 C 259.828125 393.074219 260.015625 389.601562 260.390625 386.222656 C 260.484375 384.90625 260.765625 383.589844 260.957031 382.371094 C 261.613281 378.144531 265.179688 374.859375 264.617188 370.164062 C 265.554688 370.636719 266.210938 371.105469 266.964844 371.480469 C 268.277344 372.042969 269.3125 371.855469 269.96875 370.351562 C 271.375 366.972656 274.378906 365.378906 277.574219 364.4375 C 280.109375 363.59375 282.269531 362.464844 284.332031 360.777344 C 286.679688 358.804688 289.121094 356.925781 292.59375 357.117188 C 297.664062 357.304688 302.359375 356.082031 305.925781 352.140625 C 309.027344 348.757812 312.3125 348.195312 316.253906 350.449219 C 318.789062 351.859375 321.605469 352.046875 324.515625 351.667969 C 330.148438 350.824219 335.03125 348.382812 339.632812 345.191406 C 343.199219 342.65625 346.390625 339.746094 348.269531 335.617188 C 349.492188 332.894531 351.367188 330.734375 354.277344 329.609375 C 355.21875 329.234375 356.15625 328.855469 356.8125 328.199219 C 360.472656 323.785156 364.136719 319.28125 367.703125 314.679688 C 369.488281 312.332031 368.644531 309.515625 368.832031 306.886719 C 368.925781 304.445312 369.207031 301.816406 371.367188 300.410156 C 375.121094 297.875 377 294.210938 378.5 290.269531 C 379.160156 288.675781 379.160156 286.796875 379.441406 285.105469 C 379.34375 284.824219 380.003906 284.636719 380.097656 284.355469 C 380.472656 283.226562 380.753906 282.007812 380.941406 280.785156 C 381.597656 277.40625 382.257812 274.121094 382.820312 270.742188 C 383.476562 266.703125 384.039062 262.667969 384.601562 258.628906 C 385.167969 254.875 385.355469 251.121094 386.105469 247.363281 C 386.574219 244.734375 388.078125 242.386719 390.800781 241.542969 C 399.625 238.539062 405.726562 232.8125 408.355469 223.890625 C 409.671875 219.574219 412.207031 217.507812 416.429688 216.757812 C 421.21875 215.910156 425.632812 214.222656 428.449219 209.902344 C 429.199219 208.683594 429.667969 207.273438 430.609375 206.242188 C 433.050781 203.613281 435.675781 201.171875 438.214844 198.636719 C 444.222656 192.722656 446.476562 185.773438 444.410156 177.511719 C 443.660156 174.695312 443.285156 171.878906 442.816406 168.96875 C 442.4375 166.621094 442.628906 164.085938 441.96875 161.832031 C 440.46875 156.855469 437.652344 152.914062 431.925781 151.976562 C 430.328125 151.695312 428.824219 151.222656 427.230469 151.035156 C 423.757812 150.472656 420.84375 148.96875 418.6875 146.34375 C 414.929688 141.554688 411.269531 136.578125 407.796875 131.601562 C 405.542969 128.410156 403.851562 124.9375 399.25 124.558594 C 398.6875 124.558594 398.03125 123.714844 397.65625 123.058594 C 395.777344 119.773438 392.960938 118.082031 389.300781 117.707031 C 387.328125 117.519531 385.167969 117.332031 383.382812 117.894531 C 378.222656 119.585938 373.527344 118.082031 368.925781 116.296875 C 367.046875 115.640625 365.171875 114.421875 363.855469 113.011719 C 362.167969 111.226562 360.101562 110.382812 357.847656 110.101562 C 353.527344 109.445312 349.492188 110.664062 345.546875 112.167969 C 343.578125 112.917969 341.511719 113.667969 339.257812 114.421875 C 340.292969 110.382812 341.230469 106.722656 342.261719 103.058594 C 342.730469 101.277344 342.546875 100.335938 340.667969 99.585938 C 337.851562 98.367188 335.222656 96.769531 332.59375 95.171875 C 331.277344 94.328125 330.246094 93.109375 328.835938 92.261719 C 323.859375 89.257812 318.414062 87.570312 312.6875 86.441406 C 306.304688 85.222656 300.296875 86.160156 295.039062 90.292969 C 292.410156 92.355469 289.78125 94.328125 287.246094 96.207031 C 286.398438 94.234375 285.179688 92.542969 283.675781 91.230469 C 284.617188 91.136719 285.648438 90.855469 286.585938 90.480469 C 288.464844 89.726562 290.34375 88.882812 291.9375 87.757812 C 294.753906 85.597656 297.574219 83.34375 300.105469 80.808594 C 301.609375 79.308594 301.234375 78.085938 299.261719 77.148438 C 293.816406 74.519531 287.996094 73.484375 281.988281 73.484375 C 279.171875 73.484375 276.824219 74.613281 274.664062 75.925781 C 272.410156 77.335938 270.4375 79.023438 268.09375 80.339844 C 266.214844 81.371094 264.242188 82.40625 261.425781 81.746094 C 262.269531 79.964844 262.738281 78.179688 263.773438 76.773438 C 268 70.949219 273.253906 66.351562 279.546875 62.875 C 281.328125 61.9375 282.832031 60.71875 282.457031 58.371094 C 282.175781 56.679688 282.832031 55.554688 284.148438 54.613281 C 285.179688 53.863281 286.121094 53.019531 287.433594 51.890625 C 286.214844 51.234375 285.460938 50.671875 284.523438 50.390625 C 282.738281 49.734375 280.671875 49.449219 278.984375 48.605469 C 277.855469 48.042969 276.730469 46.917969 276.449219 45.789062 C 275.882812 43.628906 276.074219 41.28125 275.511719 39.03125 C 274.382812 33.867188 272.976562 28.703125 271.753906 24.007812 C 269.40625 22.410156 267.902344 23.351562 266.589844 24.851562 C 265.277344 26.261719 263.773438 27.480469 262.554688 28.984375 C 261.988281 29.734375 261.519531 30.863281 261.707031 31.800781 C 262.085938 34.617188 262.085938 35.085938 259.457031 35.742188 C 257.109375 36.402344 255.699219 37.808594 254.949219 39.875 C 254.386719 41.375 253.257812 42.128906 251.757812 42.503906 C 247.53125 43.535156 243.402344 43.253906 239.175781 42.691406 C 235.984375 42.222656 233.074219 41.46875 231.195312 38.558594 C 230.820312 37.902344 229.882812 37.433594 229.226562 37.339844 C 226.503906 36.871094 223.78125 36.589844 221.058594 36.117188 C 219.085938 35.742188 217.957031 36.402344 216.832031 38.089844 C 214.859375 41.28125 210.164062 44.851562 205.003906 42.785156 C 201.714844 41.46875 198.242188 41.941406 194.863281 43.066406 C 191.671875 44.097656 188.382812 44.851562 185.097656 45.414062 C 182.75 45.882812 180.402344 45.507812 178.527344 43.722656 C 174.488281 39.96875 172.140625 35.273438 171.484375 29.734375 C 170.921875 25.132812 172.707031 21.191406 175.050781 17.53125 C 177.585938 13.679688 177.492188 13.210938 174.019531 10.488281 C 172.328125 9.171875 171.671875 7.671875 172.140625 5.605469 C 172.328125 4.761719 172.894531 3.914062 172.707031 3.257812 C 172.515625 2.226562 172.046875 0.910156 171.296875 0.535156 C 169.136719 -0.589844 167.449219 0.0664062 165.757812 2.414062 C 163.410156 5.511719 161.34375 8.984375 157.121094 9.644531 C 154.117188 10.113281 151.015625 10.394531 147.917969 10.675781 C 147.167969 10.769531 146.417969 10.488281 145.664062 10.582031 C 143.320312 10.675781 142.097656 12.273438 140.972656 14.054688 C 139 17.339844 138.15625 17.4375 135.339844 14.808594 C 135.058594 14.617188 134.867188 14.242188 134.585938 14.148438 C 132.050781 12.835938 129.609375 11.519531 127.078125 10.488281 C 126.417969 10.207031 125.011719 10.863281 124.542969 11.519531 C 122.851562 13.867188 122.851562 16.589844 123.507812 19.3125 C 124.449219 22.882812 126.136719 25.605469 129.800781 27.292969 C 132.992188 28.796875 132.804688 32.644531 129.800781 34.335938 C 128.859375 34.898438 127.734375 35.179688 126.792969 35.742188 C 120.410156 39.40625 114.027344 43.066406 107.640625 46.820312 C 106.328125 47.667969 105.105469 47.667969 103.792969 47.105469 C 101.351562 45.976562 99.003906 45.882812 96.75 47.574219 C 96.46875 47.855469 95.625 47.855469 95.25 47.574219 C 92.339844 45.601562 89.992188 43.253906 89.332031 39.5 C 88.769531 36.214844 87.175781 33.773438 83.605469 32.925781 C 81.164062 32.363281 79.007812 32.925781 76.753906 33.679688 C 73.5625 34.710938 70.460938 34.804688 67.082031 34.335938 C 64.734375 33.960938 62.292969 34.054688 59.949219 34.335938 C 58.351562 34.523438 57.320312 35.835938 57.132812 37.527344 C 56.941406 39.3125 58.070312 40.34375 59.570312 41 C 60.605469 41.46875 61.730469 41.753906 62.484375 42.503906 C 63.234375 43.160156 63.890625 44.289062 63.890625 45.132812 C 63.890625 45.789062 62.859375 46.726562 62.105469 47.011719 C 60.980469 47.386719 59.664062 47.480469 58.445312 47.480469 C 54.03125 47.667969 51.96875 50.390625 53.75 54.425781 C 54.878906 56.960938 56.472656 59.402344 58.257812 61.5625 C 61.542969 65.789062 61.917969 69.730469 58.914062 74.050781 C 57.226562 76.492188 55.628906 79.023438 56.566406 82.3125 C 56.753906 82.96875 56.472656 83.8125 56.097656 84.46875 C 54.785156 87.289062 53.84375 90.199219 53.9375 93.484375 C 53.9375 94.234375 53.65625 95.078125 53.375 95.832031 C 52.90625 97.519531 52.0625 99.210938 51.96875 100.902344 C 51.683594 105.03125 49.902344 106.535156 46.050781 105.3125 C 42.390625 104.09375 39.199219 104.65625 35.914062 106.441406 C 34.785156 107.003906 33.378906 107.097656 32.0625 107.191406 C 30.5625 107.191406 29.058594 106.910156 27.460938 106.722656 C 27.085938 108.789062 25.679688 109.632812 23.800781 109.914062 C 23.332031 110.007812 22.957031 110.289062 22.582031 110.570312 C 16.570312 114.703125 14.414062 121.085938 12.816406 127.753906 C 12.347656 129.535156 12.253906 131.226562 10.09375 132.257812 C 8.683594 132.917969 7.464844 134.417969 6.527344 135.828125 C 4.179688 139.300781 4.273438 141.835938 6.902344 145.121094 C 8.589844 145.96875 9.527344 147.65625 9.339844 149.816406 Z M 9.339844 149.816406"></path>
+                  </clipPath>
+                </defs>
+              </svg>
+
+              <div class="clipped-img" id="particles-js"></div>
+              <svg width="450" height="450" viewBox="0 0 450 450">
+                <use xlink:href="#mypath" />
+              </svg>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ------------------------------------ -->
+<div id="energy" class="bg-E8F2F5 d-flex justify-content-center align-items-center homepage-section">
+  <div class="row container">
+      <div class="col-lg-5 position-relative text-end" data-aos="zoom-in" data-aos-delay="100" >
+          <a href="/tools/timeline#&place=country/IND&statsVar=Amount_Consumption_Electricity_PerCapita">
+            <img src="/custom_dc/brasil/iitm-energy.svg" alt="" style="max-width: 100%;">
+          </a>
+
+          <span><a href="/tools/timeline#&place=country/IND&statsVar=Amount_Consumption_Electricity_PerCapita">
+            Electricity consumption per capita in India
+          </a></span>
+      </div>
+      <div class="col-lg-7 d-flex" data-aos="zoom-in" data-aos-delay="100">
+          <div style="margin:auto auto">
+            <h2>ENERGY</h2><br/>
+            <div class="pre-line-6C63FF">
+            <h4>India has been adopting sustainable energy alternatives for the past few years. Clean Energy initiatives by the Ministry of New & Renewable Energy has pushed India to <a class="linked-text" href="https://mnre.gov.in/" target="_blank" >
+              4th Global Position
+              </a>↗ in for overall installed renewable energy capacity. Renewable Energy Systems (RES) account for <a class="linked-text" href="https://cea.nic.in/dashboard/?lang=en" target="_blank" >nearly 30% of the total installed capacity</a>↗ and Wind Energy and Solar Energy are the two biggest sources of RES. Yet, India still relies on thermal power for <a class="linked-text" href="https://npp.gov.in/dashBoard/cp-map-dashboard" target="_blank">
+                      ~60% of its electricity generation
+                      </a>↗ and we have a long way to go to successfully adopt the sustainable energy model.</h4>
+              <a href="#main" class="btn-know-more">Know more</a>
+            </div>
+        </div>
+    </div>
+  </div>
+</div><!-- End Energy -->
+
+
+<div id="water" class="bg-E8F2F5 d-flex justify-content-center align-items-center homepage-section">
+<div class="row container">
+    <div class="col-lg-7 d-flex" data-aos="zoom-in" data-aos-delay="100">
+        <div style="margin:auto auto">
+            <h2>WATER QUALITY</h2><br/>
+            <div class="pre-line-6C63FF">
+            
+            <h4>One of the major water quality issues in metropolitan areas is water hardness. Groundwater stations in 
+
+              <a class="linked-text" href="/tools/timeline#place=indiaWris%2F079_IndiaGate%2CindiaWris%2F079_BirlaMandir%2CindiaWris%2F079_MandirLanePz%2CindiaWris%2F079_UgarsenKiBaodi%2CindiaWris%2F079_LodhiGardenD%2CindiaWris%2F079_SafdarjungTomb%2CindiaWris%2F079_PresidentsEstate1%2CindiaWris%2F079_MahabirVansth%2CindiaWris%2F079_PragatiMaidan%2CindiaWris%2F079_ShramShaktiBhawan1%2CindiaWris%2F079_Talkatora%2CindiaWris%2F079_ShantiPathDw%2CindiaWris%2F079_NehruParkDw&statsVar=WaterHardness_BodyOfWater_GroundWater">New Delhi</a> , <a class="linked-text" href="/tools/timeline#place=indiaWris/568_Santhome,indiaWris/568_Vepery,indiaWris/568_Tondiarpet,indiaWris/568_Egmore,indiaWris/568_Taramani,indiaWris/568_BesantNagar,indiaWris/568_Chepauk,indiaWris/568_ElegantFlat,indiaWris/568_Alwarpet,indiaWris/568_DrRKHousePalkalainag,indiaWris/568_Thiyagarayanagar,indiaWris/568_VallalarNagar,indiaWris/568_Vyasarpadi,indiaWris/568_Aminjikarai,indiaWris/568_Villivakkam,indiaWris/568_ThousandLights,indiaWris/568_GuindyClri,indiaWris/568_Velacherry,indiaWris/568_Kodambakkam,indiaWris/568_Adyar,indiaWris/568_Mandaveli,indiaWris/568_AdityaApartments,indiaWris/568_Saidapet,indiaWris/568_EligantFlat,indiaWris/568_KcgGarden,indiaWris/568_LionsClub&statsVar=WaterHardness_BodyOfWater_GroundWater">Chennai</a> and <a class="linked-text" href="/tools/timeline#place=indiaWris%2F482_Mahim%2CindiaWris%2F482_BombayChurchGate%2CindiaWris%2F482_ColabaDandi%2CindiaWris%2F483_AMCColony%2CindiaWris%2F483_Dahisar%2CindiaWris%2F483_MahroliChemur&statsVar=WaterHardness_BodyOfWater_GroundWater">Mumbai</a> are measuring water hardness well above the permissible levels (>180mg/L is considered <a class="linked-text" href="https://www.usgs.gov/special-topics/water-science-school/science/hardness-water" target="_blank" >very hard</a>↗). But many cities are taking steps to improve their water quality indicators. Due to the <a class="linked-text" href="https://timesofindia.indiatimes.com/city/mumbai/mumbaikars-can-now-drink-water-straight-from-tap-bmc/articleshow/69287916.cms" target="_blank" >regulatory steps taken by Municipal Corporation of Greater Mumbai</a>↗ (MCGM), many water quality parameters like <a class="linked-text" href="/tools/timeline#place=indiaWris%2F482_Mahim%2CindiaWris%2F482_BombayChurchGate%2CindiaWris%2F482_ColabaDandi%2CindiaWris%2F483_AMCColony%2CindiaWris%2F483_Dahisar%2CindiaWris%2F483_MahroliChemur&statsVar=PotentialOfHydrogen_BodyOfWater_GroundWater__Concentration_Chloride_BodyOfWater_GroundWater">Chloride, pH are at permissible levels</a> in Mumbai and Mumbai Suburban districts. Gujarat is becoming a global hub of chemical manufacturing, and Ahmedabad, Gujarat's biggest city, is witnessing <a class="linked-text" href="/tools/timeline#place=indiaWris%2F438_Viramgam2%2CindiaWris%2F438_Dhandhuka1%2CindiaWris%2F438_Endla%2CindiaWris%2F438_Kumarkhan%2CindiaWris%2F438_Ghuma%2CindiaWris%2F438_Bagodara%2CindiaWris%2F438_Ughraj1%2CindiaWris%2F438_Baola%2CindiaWris%2F438_Tagadi1%2CindiaWris%2F438_Viramgam1%2CindiaWris%2F438_Tagadi%2CindiaWris%2F438_Dalod%2CindiaWris%2F438_Kundal%2CindiaWris%2F438_Khabhada%2CindiaWris%2F438_Bavla%2CindiaWris%2F438_Bhariyad%2CindiaWris%2F438_Gamph%2CindiaWris%2F438_Bhamsara%2CindiaWris%2F438_Mandal1%2CindiaWris%2F438_Vithalpur%2CindiaWris%2F438_ThoriMubarak%2CindiaWris%2F438_Devalia%2CindiaWris%2F438_Sitapur%2CindiaWris%2F438_Bhayala%2CindiaWris%2F438_Adawal%2CindiaWris%2F438_ShahpurABad&statsVar=TotalDissolvedSolids_BodyOfWater_GroundWater">high levels of Total Dissolved Solids</a>. TDS values greater than 1200mg/L render the water <a class="linked-text" href="https://www.safewater.org/fact-sheets-1/2017/1/23/tds-and-ph" target="_blank" >unfit for consumption</a>↗.</h4>
+            <a href="#main" class="btn-know-more">Know more</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5 position-relative text-end" data-aos="zoom-in" data-aos-delay="100" >
+        <a href="/tools/timeline#place=indiaWris%2F482_Mahim%2CindiaWris%2F482_BombayChurchGate%2CindiaWris%2F482_ColabaDandi%2CindiaWris%2F483_AMCColony%2CindiaWris%2F483_Dahisar%2CindiaWris%2F483_MahroliChemur&statsVar=PotentialOfHydrogen_BodyOfWater_GroundWater&chart=%7B%22totalDissolvedSolids%22%3A%7B%22pc%22%3Afalse%2C%22delta%22%3Afalse%7D%7D"> <img src="/custom_dc/brasil/iitm-water.png" alt="" style="max-width: 100%;"> </a>
+
+        <span><a href="/tools/timeline#place=indiaWris%2F482_Mahim%2CindiaWris%2F482_BombayChurchGate%2CindiaWris%2F482_ColabaDandi%2CindiaWris%2F483_AMCColony%2CindiaWris%2F483_Dahisar%2CindiaWris%2F483_MahroliChemur&statsVar=PotentialOfHydrogen_BodyOfWater_GroundWater&chart=%7B%22totalDissolvedSolids%22%3A%7B%22pc%22%3Afalse%2C%22delta%22%3Afalse%7D%7D">Ground Water pH levels in Mumbai</a></span>
+    </div>
+</div>
+</div><!-- End Water -->
+
+<div id="health" class="bg-E8F2F5 d-flex justify-content-center align-items-center homepage-section">
+<div class="row container">
+    <div class="col-lg-5 position-relative text-end" data-aos="zoom-in" data-aos-delay="100" >
+      <a href="/tools/timeline#&place=country/IND&statsVar=Count_Death_0Years_AsFractionOf_Count_BirthEvent_LiveBirth"> <img src="/custom_dc/brasil/iitm-health.svg" alt="" style="max-width: 100%;"> </a>
+
+      <span><a href="/tools/timeline#&place=country/IND&statsVar=Count_Death_0Years_AsFractionOf_Count_BirthEvent_LiveBirth">Infant mortality rate in India</a></span>
+    </div>
+    <div class="col-lg-7 d-flex" data-aos="zoom-in" data-aos-delay="100">
+        <div style="margin:auto auto">
+            <h2>HEALTH</h2><br/>
+            <div class="pre-line-6C63FF">
+            <h4>India has been working towards betterment of its health infrastructure. Infant mortality rate has <a class="linked-text" href="/tools/timeline#place=country%2FIND&statsVar=Count_Death_0Years">declined more than 50%</a> in the past decade and the gap between male and female infant mortality rates <a class="linked-text" href="/tools/timeline#place=country%2FIND&statsVar=Count_Death_0Years_Male_AsFractionOf_Count_BirthEvent_LiveBirth_Male__Count_Death_0Years_Female_AsFractionOf_Count_BirthEvent_LiveBirth_Female" t>is closing</a>. Health behavior is also showing appreciable trends in some cases. <a class="linked-text" href="/tools/timeline#place=country%2FIND&statsVar=Count_Person_15OrMoreYears_Male_Smoking_AsFractionOf_Count_Person_15OrMoreYears_Male">Smoking prevalence is dropping</a> among Indian adult males.</h4>
+            <a href="#main" class="btn-know-more">Know more</a>
+            </div>
+        </div>
+    </div>
+</div>
+</div><!-- End health -->
+
+
+<div id="economy" class="bg-E8F2F5 d-flex justify-content-center align-items-center homepage-section">
+<div class="row container">
+    <div class="col-lg-7 d-flex" data-aos="zoom-in" data-aos-delay="100">
+        <div style="margin:auto auto">
+            <h2>ECONOMY</h2><br/>
+            <div class="pre-line-6C63FF">
+            <h4>The Indian economy has been witnessing a <a class="linked-text" href="/tools/timeline#&place=country/IND&statsVar=Amount_EconomicActivity_GrossDomesticProduction_Nominal_PerCapita">steep increase in GDP per capita</a> for the past couple of decades. After the launch of Make In India initiative in 2014, the domestic companies <a class="linked-text" href="/tools/timeline#&place=country/IND&statsVar=Amount_Stock">enjoyed a boost in market capitalization</a>. Despite that, the unemployment rate (both urban and rural) <a class="linked-text" href="/tools/timeline#&place=country/IND&statsVar=UnemploymentRate_Person_Rural__UnemploymentRate_Person_Urban">grew over twice its value</a> in the past decade. Manipur has the <a class="linked-text" href="/ranking/Count_Person_Workers/State/country/IND?h=country%2FIND&pc=1&scaling=100&unit=%25">highest working population</a> whereas Bihar houses the <a class="linked-text" href="/ranking/Count_Person_NonWorker/State/country/IND?h=country%2FIND&pc=1&scaling=100&unit=%25">highest non-working population</a> in India.</h4>
+            <a href="#main" class="btn-know-more">Know more</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5 position-relative text-end" data-aos="zoom-in" data-aos-delay="100" >
+      <a href="/tools/timeline#&place=country/IND&statsVar=Amount_EconomicActivity_GrossDomesticProduction_Nominal_PerCapita">
+      <img src="/custom_dc/brasil/iitm-economy.svg" alt="" style="max-width: 100%;">
+        </a>
+      <span><a href="/tools/timeline#&place=country/IND&statsVar=Amount_EconomicActivity_GrossDomesticProduction_Nominal_PerCapita">Gross domestic product per capita in India</a></span>
+  </div>
+</div>
+</div><!-- End Economy -->
+
+
+<div id="education" class="bg-E8F2F5 d-flex justify-content-center align-items-center homepage-section">
+<div class="row container">
+    <div class="col-lg-5 position-relative text-end" data-aos="zoom-in" data-aos-delay="100" >
+        <a href="/tools/timeline#&place=country/IND,wikidataId/Q1498,wikidataId/Q1191,wikidataId/Q1165,wikidataId/Q1356,wikidataId/Q1159&statsVar=Count_Person_Literate__Count_Person_Illiterate&pc&denom=Count_Person">
+        <img src="/custom_dc/brasil/iitm-education.svg" alt="" style="max-width: 100%;"></a>
+
+        <span><a href="/tools/timeline#&place=country/IND,wikidataId/Q1498,wikidataId/Q1191,wikidataId/Q1165,wikidataId/Q1356,wikidataId/Q1159&statsVar=Count_Person_Literate__Count_Person_Illiterate&pc&denom=Count_Person">
+          Percentage of literate and illiterate population in India
+        </a></span>
+    </div>
+    <div class="col-lg-7 d-flex" data-aos="zoom-in" data-aos-delay="100">
+        <div style="margin:auto auto">
+            <h2>EDUCATION</h2><br/>
+            <div class="pre-line-6C63FF">
+            <h4>According to the 2011 Census, India enjoys an <a class="linked-text" href="/tools/timeline#place=country%2FIND&statsVar=Count_Person_Literate__Count_Person_Illiterate">
+                overall literacy rate of 74%
+                </a> - a 10% increase from 2001 Census. <a class="linked-text" href="/tools/timeline#place=country%2FIND&statsVar=Count_Person_25OrMoreYears_BachelorsDegreeOrHigher_AsFractionOf_Count_Person_25OrMoreYears">
+                    9.1% of Indian adults over 25 years
+                    </a> hold a bachelor’s degree or higher education qualification whereas the fraction of same group with <a class="linked-text" href="/tools/timeline#place=country%2FIND&statsVar=Count_Person_25OrMoreYears_TertiaryEducation_AsFractionOf_Count_Person_25OrMoreYears">
+                        tertiary education occupies 9.9%
+                        </a> of the total population for that age group. Gross Enrolment Ratio (GER) denotes the fraction of high school students enrolling into colleges. All India Survey on Higher Education tells us that <a class="linked-text" href="https://www.education.gov.in/sites/upload_files/mhrd/files/statistics-new/aishe_eng.pdf" target="_blank" >
+                            GER for the year 2019-20 is 27.1
+                            </a>↗.</h4>
+            <a href="#main" class="btn-know-more">Know more</a>
+            </div>
+        </div>
+    </div>
+</div>
+</div><!-- End education -->
+
+
+<div id="demographics" class="bg-E8F2F5 d-flex justify-content-center align-items-center homepage-section">
+<div class="row container">
+    <div class="col-lg-7 d-flex" data-aos="zoom-in" data-aos-delay="100">
+        <div style="margin:auto auto">
+            <h2>DEMOGRAPHICS</h2><br/>
+            <div class="pre-line-6C63FF">
+            <h4>India is the world's second most populous country with a <a class="linked-text" href="/ranking/Count_Person/Country/?h=country%2FIND">population of over 1.2 billion.</a> <br/> The population growth rate has been in <a class="linked-text" href="/tools/timeline#place=country%2FIND&statsVar=GrowthRate_Count_Person">steady decline</a> for decades now. The ratio between urban and rural population has changed considerably in the last 20 years. The ratio <a class="linked-text" href="/tools/timeline#&place=country/IND&statsVar=Count_Person_Urban__Count_Person_Rural">grew from 1:3 to 1:2 during the period of 1999-2019.</a> Life expectancy has <a class="linked-text" href="/tools/timeline#place=country%2FIND&statsVar=LifeExpectancy_Person">increased by 45%</a> in the past 50 years. <a class="linked-text" href="/tools/timeline#place=country%2FIND&statsVar=Count_Person_7To14Years_Employed_AsFractionOf_Count_Person_7To14Years" >Child labour is in decline</a> for the past decade.</h4>
+            <a href="#main" class="btn-know-more">Know more</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-5 position-relative text-end" data-aos="zoom-in" data-aos-delay="100" >
+      <a href="/tools/map#%26sv%3DCount_Person%26pc%3D0%26denom%3DCount_Person%26pd%3Dcountry%2FIND%26ept%3DAdministrativeArea1"> <img src="/custom_dc/brasil/iitm-india-population.png" alt="" style="max-width: 100%;"> </a>
+      <span><a href="/tools/map#%26sv%3DCount_Person%26pc%3D0%26denom%3DCount_Person%26pd%3Dcountry%2FIND%26ept%3DAdministrativeArea1">Population in India (2011-2015)</a></span>
+      <!-- style="left:auto; right:0!important;" -->
+  </div>
+</div>
+</div><!-- End Demographics -->
+{% endblock %}
+
+{% block footer %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js" integrity="sha512-UAwTMvQYA0b3b0FeYytT+TV/2yrh9LAi8LW9mxP/H3Bgx0FbiHMk7hlooLDxTpm1j+mKRXS3XhcLu9InmWpxtQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/custom_dc/brasil/particles.js"></script>
+<script src="/custom_dc/brasil/app.js"></script>
+<script src="/custom_dc/brasil/bs-init.js"></script>
+<script src="/custom_dc/brasil/creative.js"></script>
+{% endblock %}

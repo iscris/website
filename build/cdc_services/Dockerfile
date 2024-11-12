@@ -116,9 +116,9 @@ RUN npm run-script build
 FROM --platform=linux/amd64 google/cloud-sdk:slim as download
 
 # Copy model and embeddings.
-RUN mkdir -p /tmp/datcom-nl-models \
-    && gsutil -m cp -R gs://datcom-nl-models/ft_final_v20230717230459.all-MiniLM-L6-v2/ /tmp/datcom-nl-models/ \
-    && gsutil cp -R gs://datcom-nl-models/embeddings_medium_2024_05_09_18_01_32.ft_final_v20230717230459.all-MiniLM-L6-v2.csv /tmp/datcom-nl-models/
+# RUN mkdir -p /tmp/datcom-nl-models \
+#     && gsutil -m cp -R gs://datcom-nl-models/ft_final_v20230717230459.all-MiniLM-L6-v2/ /tmp/datcom-nl-models/ \
+#     && gsutil cp -R gs://datcom-nl-models/embeddings_medium_2024_05_09_18_01_32.ft_final_v20230717230459.all-MiniLM-L6-v2.csv /tmp/datcom-nl-models/
 
 
 # #### Final stage: Runtime env. ####
@@ -151,7 +151,7 @@ COPY --from=py-servers /datacommons/ /datacommons
 # Static website assets.
 COPY --from=static /workspace/server ./server
 # Downloaded model and embeddings.
-COPY --from=download /tmp/datcom-nl-models /tmp/datcom-nl-models
+# COPY --from=download /tmp/datcom-nl-models /tmp/datcom-nl-models
 
 # Copy executable script.
 COPY build/cdc_services/run.sh .
