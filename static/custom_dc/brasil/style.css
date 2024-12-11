@@ -4,12 +4,15 @@
   --iitm-red: #27334a;
   --iitm-link: #3036e7;
   --iitm-link-dark: #1d22a2;
-  --iitm-orange: #b1d2e9;
-  --iitm-btn-bg: #073654;
+  --baby-blue: #b1d2e9;
+  --main-blue: #3583c0;
+  --darker-blue: #255c86;
+  --darkest-blue: #073654;
   --iitm-section-text: #0d0952;
-  --dc-primary: #80296e;
-  --link-color: #80296e;
-  --footer-background: #0b1434;
+  --dc-primary: #3583c0;
+  --link-color: #3583c0;
+  --footer-background: #0d1b25;
+  --pink-triadic: #c03583;
 }
 
 header.masthead {
@@ -85,17 +88,27 @@ h6 {
 }
 
 a.linked-text {
-  color: var(--iitm-orange);
+  color: var(--main-blue);
   cursor: pointer;
 }
 
 a.linked-text:hover {
-  color: var(--iitm-red);
+  color: var(--darker-blue);
+  text-underline-offset: 0.2em;
+}
+
+a.linked-text-blue-bg {
+  color: var(--darkest-blue);
+  cursor: pointer;
+}
+
+a.linked-text-blue-bg:hover {
+  color: var(--baby-blue);
   text-underline-offset: 0.2em;
 }
 
 .btn.btn-primary {
-  background-color: var(--iitm-btn-bg);
+  background-color: var(--darkest-blue);
 }
 
 #hero h1 {
@@ -110,7 +123,7 @@ a.linked-text:hover {
  * Get Know More Button
  */
 .btn-know-more {
-  background: var(--iitm-btn-bg);
+  background: var(--darkest-blue);
   color: #fff;
   border-radius: 7px;
   padding: 10px 25px;
@@ -139,7 +152,7 @@ a.linked-text:hover {
 }
 
 .pre-line-6C63FF {
-  border-left: 3px solid #6c63ff;
+  border-left: 3px solid var(--main-blue);
   padding-left: 20px;
 }
 
@@ -153,11 +166,21 @@ a.linked-text:hover {
 }
 
 .bg-navy {
-  background-color: #0b1434 !important;
+  background-color: #0d1b25 !important;
 }
 
 .homepage-section {
   padding: 5rem 0 !important;
+}
+
+.homepage-section .position-relative {
+  display: flex;
+}
+
+.homepage-section .position-relative a {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .bg-E8F2F5 h2 {
@@ -180,7 +203,7 @@ a.linked-text:hover {
   left: 0;
   font-size: 16px;
   text-decoration: underline;
-  color: #80296e;
+  color: var(--footer-background);
 }
 
 .bg-E8F2F5 .position-relative span a:hover {
@@ -232,7 +255,7 @@ hr {
 }
 
 #iitm-india #main-footer a:hover {
-  color: var(--link-color);
+  color: var(--baby-blue);
 }
 
 #iitm-india #main-footer #sub-footer {
@@ -241,6 +264,11 @@ hr {
   border-top: none !important;
   margin-bottom: 0 !important;
   padding-bottom: 0.5rem !important;
+}
+
+.sub-footer-links {
+  display: flex;
+  gap: 0.875rem;
 }
 
 #main-nav .nav-link {
@@ -290,11 +318,15 @@ hr {
   }
 }
 
+.collapse.navbar-collapse {
+  height: 3rem;
+}
+
 #mainNav.navbar-shrink {
   border-bottom: 1px solid rgba(33, 37, 41, 0.1);
   background-color: rgba(218, 226, 229, 0.92);
 }
 
 .dropdown-item {
-  color: #294969;
+  color: #294969
 }

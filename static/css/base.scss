@@ -25,6 +25,19 @@ $sub-footer-breakpoint: 596px;
   --breakpoint-xl: 1040px;
 }
 
+html, body, div#main {
+  height: 100%;
+}
+
+div#main {
+  display: flex;
+  flex-direction: column;
+  main {
+    flex: 1;
+    margin: 0;
+  }
+}
+
 /** Bootstrap overrides **/
 $link-color: var(--link-color);
 $link-hover-color: $link-color;

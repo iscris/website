@@ -1,40 +1,41 @@
 {"scatter": [
   {
-    "header": "Literacy Rate vs Poverty Rate",
-    "preposition": "among",
+    "header": "Illiteracy Rate vs Poverty Rate",
+    "preposition": "among ",
     "examples": [{
-      "text": "all Indian states",
-      "url": "#%26svx%3DCount_Person_Literate%26dx%3DCount_Person%26svy%3DCount_Person_BelowPovertyLevelInThePast12Months%26dy%3DCount_Person%26epd%3Dcountry%2FIND%26ept%3DAdministrativeArea1"
+      "text": "all Brazilian states",
+      "url": "#%26svx%3Dtaxa_de_pobreza_nacional%26dx%3DCount_Person%26svy%3Dtaxa_de_analfabetismo_pessoas_com_15_anos_ou_mais%26dy%3DCount_Person%26epd%3Dcountry%2FBRA%26ept%3DAdministrativeArea1%26pp%3D"
     }]
   }, {
-    "header": "Count of Urban Households vs Rural Households",
+    "header": "Urban Households vs Rural Households",
     "preposition": "among",
     "examples": [{
-      "text": "all Indian districts",
-      "url": "#%26svx%3DCount_Household_Urban%26dx%3DCount_Person%26svy%3DCount_Household_Rural%26dy%3DCount_Person%26epd%3Dcountry%2FIND%26ept%3DAdministrativeArea2"
+      "text": "all Brazilian states",
+      "url": "#%26svx%3Dpopulao_residente_urbana%26dx%3DCount_Person%26svy%3Dpopulao_residente_rural%26dy%3DCount_Person%26epd%3Dcountry%2FBRA%26ept%3DAdministrativeArea1%26pp%3D"
     }]
   }, {
-    "header": "Literate Population Per Capita vs. Schools Per Capita",
-    "preposition": "for",
+    "header": "IDHM - Municipal Human Development Index vs Literate Population",
+    "preposition": "among",
     "examples": [{
-      "text": "states in India",
-      "url": "#&svx=Count_School&pcx=1&dx=Count_Person&svy=Count_Person_Literate&pcy=1&dy=Count_Person&epd=country/IND&ept=AdministrativeArea1&ct=1"
+      "text": "all Brazilian states",
+      "url": "#%26svx%3Dpopulao_alfabetizada_inativa%26dx%3DCount_Person%26svy%3Didhm_ndice_de_desenvolvimento_humano_municipal%26dy%3DCount_Person%26epd%3Dcountry%2FBRA%26ept%3DAdministrativeArea1%26pp%3D"
 
     }]
   }, {
-    "header": "Worker Population vs Female Literate Population",
+    "header": "Number of Homicides vs Gini Index",
     "preposition": "among",
     "examples": [{
-      "text": "all states in India",
-      "url": "#%26svx%3DCount_Person_Literate_Female%26dx%3DCount_Person%26svy%3DCount_Person_Workers%26dy%3DCount_Person%26epd%3Dcountry%2FIND%26ept%3DAdministrativeArea1"
+      "text": "all Brazilian states",
+      "url": "#%26svx%3Dndice_de_gini_atlas_dh_censo%26dx%3DCount_Person%26svy%3Dnmero_de_homicdios%26dy%3DCount_Person%26epd%3Dcountry%2FBRA%26ept%3DAdministrativeArea1%26pp%3D"
 
     }]
   }, {
-    "header": "Number of Schools vs Dropout Rate of Female Students",
+    "header": "Total Fertility Rate vs Employed Women",
     "preposition": "among",
     "examples": [{
-      "text": "all states in India",
-      "url": "#%26svx%3DDropoutRate_Student_Female_PrimarySchool%26dx%3DCount_Person%26svy%3DCount_School%26dy%3DCount_Person%26epd%3Dcountry%2FIND%26ept%3DAdministrativeArea1"
+      "text": "all Brazilian states",
+      "url": "#%26svx%3Docupados_mulheres%26dx%3DCount_Person%26svy%3Dtaxa_de_fecundidade_total_atlas_dh_censo%26dy%3DCount_Person%26epd%3Dcountry%2FBRA%26ept%3DAdministrativeArea1%26pp%3D"
+
     }]
   }
 ]}

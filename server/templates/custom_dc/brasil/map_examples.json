@@ -1,35 +1,39 @@
-{"map": [
-  {
-    "header": "Max Temperature Relative to 2006 (RCP 4.5)",
-    "preposition": "for",
-    "examples": [{
-      "text": "districts in India",
-      "url": "#%26sv%3DDifferenceRelativeToBaseDate2006_Max_Temperature_RCP45%26pc%3D0%26pd%3Dcountry%2FIND%26ept%3DAdministrativeArea2"
-    }]
-  }, {
-    "header": "Female",
-    "preposition": "",
-    "examples": [{
-      "text": "Literate Population",
-      "url": "#%26sv%3DCount_Person_Literate_Female%26pc%3D0%26denom%3DCount_Person%26pd%3Dcountry%2FIND%26ept%3DAdministrativeArea2"
-    }, {
-      "text": "Illiterate Population",
-      "url": "#%26sv%3DCount_Person_Illiterate_Female%26pc%3D0%26denom%3DCount_Person%26pd%3Dcountry%2FIND%26ept%3DAdministrativeArea2"
-    }],
-    "postposition": "across districts in India"
-  }, {
-    "header": "Mean Monthly Wages",
-    "preposition": "across",
-    "examples": [{
-      "text": "states in India",
-      "url": "#%26sv%3DMean_WagesMonthly_Worker%26pc%3D0%26denom%3DCount_Person%26pd%3Dcountry%2FIND%26ept%3DAdministrativeArea1"
-    }]
-  }, {
-    "header": "Agricultural Laborers Population",
-    "preposition": "across",
-    "examples": [{
-      "text": "districts in India",
-      "url": "#%26sv%3DCount_Person_MainWorker_AgriculturalLabourers%26pc%3D0%26denom%3DCount_Person%26pd%3Dcountry%2FIND%26ept%3DAdministrativeArea2"
-    }]
-  }
-]}
+{
+  "map": [
+    {
+      "header": "Life Expectancy at Birth",
+      "preposition": "for",
+      "examples": [
+        {
+          "text": "cities in Brazil",
+          "url": "#%26sv%3Desperana_de_vida_ao_nascer%26pc%3D0%26denom%3DCount_Person%26pd%3Dcountry%2FBRA%26ept%3DAdministrativeArea2"
+        }
+      ]
+    },
+    {
+      "header": "Land used",
+      "preposition": "for",
+      "examples": [
+        {
+          "text": "agriculte and livestock",
+          "url": "#%26sv%3Dutilizao_das_terras_rea_do_estabelecimento_total_censo_agropecurio%26pc%3D0%26denom%3DCount_Person%26pd%3DwikidataId%2FQ40040%26ept%3DAdministrativeArea2"
+        },
+        {
+          "text": "planted area - temporary crops",
+          "url": "#%26sv%3Drea_plantada_lavoura_temporria%26pc%3D0%26denom%3DCount_Person%26pd%3DwikidataId%2FQ40040%26ept%3DAdministrativeArea2"
+        }
+      ],
+      "postposition": "across cities in Amazonas"
+    },
+    {
+      "header": "Number of municipalities",
+      "preposition": "in all",
+      "examples": [
+        {
+          "text": "states in Brazil",
+          "url": "#%26sv%3Dquantidade_de_municpios%26pc%3D0%26denom%3DCount_Person%26pd%3Dcountry%2FBRA%26ept%3DAdministrativeArea1"
+        }
+      ]
+    }
+  ]
+}

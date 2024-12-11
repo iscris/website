@@ -25,6 +25,7 @@ class Config(_base.Config):
   SHOW_DISASTER = False
   USE_LLM = False
   USE_MEMCACHE = False
+  # NEW_STAT_VARS = ["nvel_da_desocupao"]
 
 
 class LocalConfig(Config, local.Config):
