@@ -1,6 +1,20 @@
 [
   {
     "category": "Economics",
+    "topic": "Unemployment",
+    "titleId": "CHART_TITLE-Unemployment_Level",
+    "title": "Unemployment Rate",
+    "description": "The level of unemployment in the population.",
+    "statsVars": [
+      "nvel_da_desocupao"
+    ],
+    "isRankingChart": false,
+    "relatedChart": {
+      "scale": false
+    }
+  },  
+  {
+    "category": "Economics",
     "titleId": "CHART_TITLE-Total_employed",
     "title": "Number of people employed",
     "description": "Number of people employed",

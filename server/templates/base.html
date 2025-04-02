@@ -21,7 +21,7 @@
 
   Optional variables:
 
-  is_hide_header_search_bar: boolean, if true, the header will not contain a search bar. Default false.
+  is_show_header_search_bar: boolean, if true, a search bar will appear in the header. Default false.
   is_hide_full_footer: boolean, if true, hides the full expanded footer. Default false
   is_hide_sub_footer: boolean, if true, hides the sub footer. Default false
   locale: string, value for html lang attr
@@ -48,8 +48,6 @@
     gtag('config', '{{ GOOGLE_ANALYTICS_TAG_ID }}', {
       client_storage: 'none',
       anonymize_ip: true,
-      {# TODO: Remove new_place_page custom dimension after full launch #}
-      {{ ("new_place_page: {},"|safe).format('true' if new_place_page else 'false') if new_place_page is defined else "" }}
       {{ ("place_category: '{}',"|safe).format(place_category) if place_category is defined else "" }}
       {{ ("send_page_view: false,"|safe) if manual_ga_pageview else "" }}
     });
@@ -73,10 +71,11 @@
   {% endblock %}
 
   {% if config['LOCAL'] %}
-  <link rel="icon" href="/images/favicon-local.png" type="image/png">
+  <link rel="icon" href="/static/images/favicon-local.png" type="image/png">
   {% else %}
-  <link rel="icon" href="/images/favicon.png" type="image/png">
+  <link rel="icon" href="/static/images/favicon-local.png" type="image/png">
   {% endif %}
+
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;700&family=Google+Sans+Text:wght@300;400;500;700&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined&display=block">
@@ -89,7 +88,6 @@
   <script>
     globalThis.isCustomDC = {{ config['CUSTOM']|int }};
     globalThis.STAT_VAR_HIERARCHY_CONFIG = {{ config['STAT_VAR_HIERARCHY_CONFIG'] | tojson }};
-    globalThis.FEATURE_FLAGS = {{ config['FEATURE_FLAGS'] | tojson }};
     globalThis.enableBQ = {{ config['ENABLE_BQ']|int }};
   </script>
   <script>
@@ -111,7 +109,7 @@
   </script>
 </head>
 
-<body {% if is_hide_header_search_bar %}class="no-header-search-bar"{% endif %}>
+<body {% if not is_show_header_search_bar %}class="no-header-search-bar"{% endif %}>
 
 <div id="metadata-base" class="d-none"
   data-header="{{ HEADER_MENU_V2 }}"
@@ -121,22 +119,17 @@
   data-name="{{ NAME }}"
   data-show-disaster="{{ SHOW_DISASTER }}"
   data-show-sustainability="{{ SHOW_SUSTAINABILITY }}"
-  data-hide-header-search-bar="{{ is_hide_header_search_bar }}"
-  data-ga-value-search-source="{{ ga_value_search_source }}"
-  data-search-bar-hash-mode="{{ is_search_bar_hash_mode }}"
+  data-show-header-search-bar="{{ is_show_header_search_bar }}"
   data-hide-full-footer="{{ is_hide_full_footer }}"
   data-hide-sub-footer="{{ is_hide_sub_footer }}"
   data-subfooter-extra="{{ subfooter_extra_content|safe }}"
   data-brand-logo-light="{{ brand_logo_light }}"
-  data-locale="{{ locale }}"
-  data-sample-questions="{{ sample_questions }}"
 >
 </div>
 
 {% include 'metadata/labels.html' %}
 {% include 'metadata/routes.html' %}
 
-<script src={{url_for('static', filename='queryStore.js', t=config['VERSION'])}} async></script>
 <script src={{url_for('static', filename='base.js', t=config['VERSION'])}} async></script>
 
 <div id="main">

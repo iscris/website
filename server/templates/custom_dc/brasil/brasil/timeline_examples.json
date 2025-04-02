@@ -1,0 +1,42 @@
+{"timeline": [
+  {
+    "header": "Comparison of Brazilian Cities",
+    "subheaders": [{
+      "examples": [{
+        "text": "Total Resident Population",
+        "url": "#place=wikidataId%2FQ42800%2CwikidataId%2FQ570312%2CwikidataId%2FQ275654%2CwikidataId%2FQ737644%2C%2CwikidataId%2FQ1451808&statsVar=populao_residente_total"
+      }]
+    }, {
+      "examples": [{
+        "text": "Electorate",
+        "url": "#place=wikidataId%2FQ570312%2CwikidataId%2FQ979308%2CwikidataId%2FQ42800&statsVar=eleitorado"
+      }]
+    }]
+  }, {
+    "header": "Comparison of Brazilian States",
+    "subheaders": [{
+      "examples": [{
+        "text": "Unemployment Rate",
+        "url": "#chart=%7B%22wagesMonthly-none%22%3A%7B%22pc%22%3Afalse%2C%22delta%22%3Afalse%7D%2C%22unemploymentRate-none%22%3A%7B%22pc%22%3Afalse%2C%22delta%22%3Afalse%7D%2C%22cumulativeCount-none%22%3A%7B%22pc%22%3Afalse%2C%22delta%22%3Afalse%7D%7D&place=wikidataId%2FQ39109%2CwikidataId%2FQ175%2CwikidataId%2FQ41428%2C%2CwikidataId%2FQ43233&statsVar=nvel_da_desocupao"
+      }]
+    }, {
+      "examples": [{
+        "text": "Illiteracy Rate",
+        "url": "#place=wikidataId%2FQ39109%2CwikidataId%2FQ42362%2CwikidataId%2FQ40030%2CwikidataId%2FQ42824%2CwikidataId%2FQ40040&statsVar=taxa_de_analfabetismo_pessoas_com_15_anos_ou_mais_atlas_dh_censo"
+      }]
+    }, {
+      "examples": [{
+        "text": "Average Per Capita Income",
+        "url": "#place=wikidataId%2FQ39109%2CwikidataId%2FQ41115%2CwikidataId%2FQ40942%2CwikidataId%2FQ42508%2CwikidataId%2FQ41587&statsVar=renda_per_capita_mdia_atlas_dh_censo"
+      }]
+    }]
+  }, {
+    "header": "Brazil Rate(s)",
+    "subheaders": [{
+      "examples": [{
+        "text": "Exports",
+        "url": "#place=country%2FBRA&statsVar=exportaes_fob"
+      }]
+    }]
+  }
+]}

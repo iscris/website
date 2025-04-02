@@ -1,4 +1,8 @@
 {
+  "nvel_da_desocupao": {
+    "defaultMessage": "Unemployment Rate",
+    "description": "Label used to describe statistical variables in chart legends, string should be short. Describes amount of pure alcohol consumed as a fraction of people of age."
+  },
   "Amount_Consumption_Alcohol_15OrMoreYears_AsFractionOf_Count_Person_15OrMoreYears": {
     "defaultMessage": "Pure Alcohol Consumption",
     "description": "Label used to describe statistical variables in chart legends, string should be short. Describes amount of pure alcohol consumed as a fraction of people of age."

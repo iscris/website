@@ -51,7 +51,7 @@ function Info(): JSX.Element {
 
       <p>Take the data and use it on your site!</p>
       <p>
-        <a href="mailto:collaborations@datacommons.org">Send</a> us your
+        <a href="mailto:contact@brazildatacommons.com.br">Send</a> us your
         discoveries!
       </p>
     </div>

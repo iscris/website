@@ -87,11 +87,15 @@
 
 .scatter-dot:hover {
   cursor: pointer;
-  fill: var(--dc-primary);
+  opacity: 1;
+  stroke: var(--pink-triadic);
+  fill: var(--pink-triadic);
 }
 
 .scatter-dot {
+  opacity: 0.5;
   stroke: var(--dc-primary);
+  fill: var(--dc-primary)
 }
 
 .density-dot:hover {
