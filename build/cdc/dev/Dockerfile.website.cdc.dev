@@ -21,7 +21,7 @@ FROM python:3.11.4-slim
 WORKDIR /app
 
 # Install dependencies and protoc
-RUN apt-get update && apt-get install -y wget unzip
+RUN apt-get update && apt-get install -y wget unzip git
 RUN wget https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_64.zip -O protoc.zip \
     && unzip protoc.zip -d /usr/local \
     && rm protoc.zip \

@@ -29,7 +29,7 @@ RUN envoy --version
 
 # Install protoc and its dependencies
 RUN apt-get install -y wget unzip \
-    && wget https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_64.zip-O protoc.zip \
+    && wget https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protoc-21.12-linux-x86_64.zip -O protoc.zip \
     && unzip protoc.zip -d /usr/local \
     && rm protoc.zip \
     && apt-get clean \

@@ -139,7 +139,7 @@ if [ "$RUN_ONLY" == false ]; then
   else
     echo -e "${GREEN}Building ${YELLOW}$CONTAINER${GREEN} container...${NC}"
   fi
-  docker-compose -f ./build/cdc/dev/docker-compose.yaml build $CONTAINER
+  docker compose -f ./build/cdc/dev/docker-compose.yaml build $CONTAINER
 fi
 
 
@@ -149,4 +149,4 @@ if [ -z $CONTAINER ]; then
 else
   echo -e "${GREEN}Running ${YELLOW}$CONTAINER${GREEN} container...${NC}"
 fi
-docker-compose -f ./build/cdc/dev/docker-compose.yaml up $CONTAINER
+docker compose -f ./build/cdc/dev/docker-compose.yaml up $CONTAINER

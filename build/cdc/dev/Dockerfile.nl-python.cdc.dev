@@ -25,6 +25,7 @@ RUN mkdir -p /tmp/datcom-nl-models \
 FROM python:3.11.4-slim
 
 # Set the working directory in the container
+RUN apt-get update && apt-get install -y git
 WORKDIR /app
 
 # Copy the NL requirements files to the container

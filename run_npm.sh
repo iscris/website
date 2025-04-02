@@ -16,10 +16,10 @@
 set -e
 
 cd packages/web-components
-npm install --update
+npm ci
 cd ../client
-npm install --update
+npm ci
 cd ../../static
-npm install --update
+npm ci
 npm run-script watch
 cd ..
