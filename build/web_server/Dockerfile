@@ -41,11 +41,18 @@ COPY static/package.json /workspace/static/package.json
 COPY static/package-lock.json /workspace/static/package-lock.json
 RUN npm --prefix /workspace/static install --omit=dev
 
-# NPM
-COPY packages/. /workspace/packages/
+# Build web-components sub-package (cached unless its sources change).
+COPY packages/web-components/. /workspace/packages/web-components/
+RUN npm --prefix /workspace/packages/web-components run build
+
+# Build client sub-package (cached unless its sources change).
+COPY packages/client/. /workspace/packages/client/
+RUN npm --prefix /workspace/packages/client run build
+
+# Build static assets (cached unless static/ sources change; sub-packages already built).
 COPY static/. /workspace/static/
 WORKDIR /workspace/static
-RUN npm run-script build
+RUN npx webpack --mode=production --config webpack.config.js
 
 # Flask
 COPY server/. /workspace/server/

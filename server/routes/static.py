@@ -54,20 +54,6 @@ def about():
   return lib_render.render_page("static/about.html", "about.html")
 
 
-@bp.route('/build')
-def build():
-  return lib_render.render_page(
-      "static/build.html",
-      "build.html",
-      partners=json.dumps(current_app.config.get('HOMEPAGE_PARTNERS', [])))
-
-
-@bp.route("/data", defaults={"path": ""}, strict_slashes=False)
-@bp.route("/data/<path:path>")
-def data(path):
-  return lib_render.render_page("static/data.html", "data.html")
-
-
 @bp.route('/faq')
 def faq():
   current_date = date.today().strftime('%-d %b %Y')
@@ -98,12 +84,6 @@ def healthz():
 @bp.route('/health')
 def health():
   return "super healthy"
-
-
-# TODO(beets): Move this to a separate handler so it won't be installed on all apps.
-@bp.route('/mcf_playground')
-def mcf_playground():
-  return render_template('mcf_playground.html')
 
 
 @bp.route('/version')

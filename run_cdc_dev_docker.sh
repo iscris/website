@@ -19,10 +19,10 @@ help() {
 cat << EOF
 Usage:
 
-./run_cdc_dev_docker.sh [--env_file|-e <env.list file path>] 
+./run_cdc_dev_docker.sh [--env_file|-e <env.list file path>]
   [--actions|-a run|build_run|build|build_upload|upload] [--container|-c all|service]
-  [--release|-r latest|stable] [--image|-i <custom image name:tag>] 
-  [--package|-p <package name:tag>] [--schema_update|-s]
+  [--release|-r latest|stable] [--image|-i <custom image name:tag>]
+  [--package|-p <package name:tag>] [--schema_update|-s] [--detach|-D]
 
 If no options are set, the default is '--env_file $PWD/custom_dc/env.list --actions run --container all --release stable'
 All containers are run, using the Data Commons-provided 'stable' image.
@@ -103,10 +103,16 @@ Options:
      
 --schema_update|-s
   Optional. In the rare case that you get a 'SQL checked failed' error in
-  your running service, you can set this to run the data container in 
+  your running service, you can set this to run the data container in
   schema update mode, which skips embeddings generation and completes much faster.
-  Only valid with 'run' and 'build_run' actions and 'all' or 'data' containers. 
+  Only valid with 'run' and 'build_run' actions and 'all' or 'data' containers.
   Ignored otherwise.
+
+--detach|-D
+  Optional. Run containers in detached (background) mode with automatic restart.
+  Containers run with '-d --restart unless-stopped' instead of '-it', and
+  DEBUG is not set. Useful for production-like deployments.
+  Only valid with 'run' and 'build_run'. Ignored otherwise.
 
 Examples:
 
@@ -132,6 +138,9 @@ Examples:
 ./run_cdc_dev_docker.sh --actions build_upload --image my-datacommons:dev
   Build a custom image, create a package with the same name and tag, and upload
   it to the Cloud Artifact Registry. Does not start any local containers.
+
+./run_cdc_dev_docker.sh --actions build_run --image my-datacommons:dev --detach
+  Build a custom image and run all containers in detached (background) mode.
 
 For more details, see https://docs.datacommons.org/custom_dc/
 EOF
@@ -172,53 +181,108 @@ run_data() {
     schema_update="-e DATA_UPDATE_MODE=schemaupdate"
     schema_update_text=" in schema update mode"
   fi
+  # Set run mode flags based on DETACH.
+  # The data container is a one-shot job: it runs ./run.sh and exits. So:
+  #   * always use --rm so the exited container is auto-removed (no zombies).
+  #   * never use --restart, otherwise Docker will re-run ./run.sh on every
+  #     successful exit, creating an infinite import loop that silently
+  #     overwrites the DB with the env.list INPUT_DIR every ~12 seconds.
+  if [ "$DETACH" == true ]; then
+    RUN_FLAGS="--rm -d"
+  else
+    RUN_FLAGS="--rm -it"
+  fi
+
+  # --- dc-brasil patch: bind-mount locally edited importer code and install
+  # extra Python deps required by our fork so that the "incremental"
+  # config flag is honored by the data container. ---
+  STATS_SRC="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")/import/simple/stats"
+  STATS_DST="/workspace/import/simple/stats"
+  EXTRA_PIP_DEPS="PyLD==2.0.4 rdflib==7.4.0"
+  DATA_CMD="pip install --quiet --no-input ${EXTRA_PIP_DEPS} && exec ./run.sh"
+  if [ -d "$STATS_SRC" ]; then
+    log_notice "Patching data container: mounting $STATS_SRC -> $STATS_DST (ro)"
+    DATA_STATS_MOUNT=(-v "$STATS_SRC:$STATS_DST:ro")
+  else
+    log_notice "WARNING: $STATS_SRC not found; running data container with baked-in importer (no incremental support)."
+    DATA_STATS_MOUNT=()
+  fi
+
   if [ "$data_hybrid" == true ]; then
     check_app_credentials
     log_notice "Starting Docker data container with '$RELEASE' release${schema_update_text} and writing output to Google Cloud..."
-    docker run -it \
+    docker run $RUN_FLAGS \
     --env-file "$ENV_FILE" \
     ${schema_update//\"/} \
     -e GOOGLE_APPLICATION_CREDENTIALS=/gcp/creds.json \
     -v $HOME/.config/gcloud/application_default_credentials.json:/gcp/creds.json:ro \
     -v $INPUT_DIR:$INPUT_DIR \
-    gcr.io/datcom-ci/datacommons-data:${RELEASE}
+    "${DATA_STATS_MOUNT[@]}" \
+    --entrypoint bash \
+    gcr.io/datcom-ci/datacommons-data:${RELEASE} \
+    -c "$DATA_CMD"
   else
     log_notice "Starting Docker data container with '$RELEASE' release${schema_update_text}..."
-    docker run -it \
+    docker run $RUN_FLAGS \
     --env-file "$ENV_FILE" \
     ${schema_update//\"/} \
     -v $INPUT_DIR:$INPUT_DIR \
     -v $OUTPUT_DIR:$OUTPUT_DIR \
-    gcr.io/datcom-ci/datacommons-data:${RELEASE}
+    "${DATA_STATS_MOUNT[@]}" \
+    --entrypoint bash \
+    gcr.io/datcom-ci/datacommons-data:${RELEASE} \
+    -c "$DATA_CMD"
   fi
 }
 
 # Run service container
 run_service() {
+  # Set run mode flags based on DETACH
+  if [ "$DETACH" == true ]; then
+    RUN_FLAGS="-d --restart unless-stopped"
+    DEBUG_FLAG=""
+  else
+    RUN_FLAGS="-it"
+    DEBUG_FLAG="-e DEBUG=true"
+  fi
+
+  # --- dc-brasil patch: mount ADC credentials if present, so GCP-backed
+  # features (e.g. stat-var search via Discovery Engine) work in regular mode.
+  # The hybrid branches below handle creds separately via check_app_credentials.
+  CREDS_FILE="$HOME/.config/gcloud/application_default_credentials.json"
+  CREDS_ARGS=()
+  if [ -f "$CREDS_FILE" ]; then
+    log_notice "Mounting ADC credentials: $CREDS_FILE -> /gcp/creds.json (ro)"
+    CREDS_ARGS=(-e "GOOGLE_APPLICATION_CREDENTIALS=/gcp/creds.json" -v "$CREDS_FILE:/gcp/creds.json:ro")
+  else
+    log_notice "WARNING: $CREDS_FILE not found; starting service without GCP credentials."
+    log_notice "         GCP-backed features (stat-var search, Discovery Engine) will return errors."
+  fi
+
   if [ "$service_hybrid" == true ]; then
     check_app_credentials
     # Custom-built image
     if [ -n "$IMAGE" ]; then
       log_notice "Starting Docker services container with custom image '${IMAGE}' reading data in Google Cloud..."
-      docker run -it \
+      docker run $RUN_FLAGS \
       --env-file "$ENV_FILE" \
       -p 8080:8080 \
-      -e DEBUG=true \
+      $DEBUG_FLAG \
       -e GOOGLE_APPLICATION_CREDENTIALS=/gcp/creds.json \
       -v $HOME/.config/gcloud/application_default_credentials.json:/gcp/creds.json:ro \
       -v $PWD/server/templates/custom_dc/$CUSTOM_DIR:/workspace/server/templates/custom_dc/$CUSTOM_DIR \
       -v $PWD/static/custom_dc/$CUSTOM_DIR:/workspace/static/custom_dc/$CUSTOM_DIR \
       $IMAGE
     # Data Commons-released images
-    else 
+    else
       if [ "$RELEASE" == "latest" ]; then
         docker pull gcr.io/datcom-ci/datacommons-services:latest
       fi
       log_notice "Starting Docker services container with '${RELEASE}' release reading data in Google Cloud..."
-      docker run -it \
+      docker run $RUN_FLAGS \
       --env-file "$ENV_FILE" \
       -p 8080:8080 \
-      -e DEBUG=true \
+      $DEBUG_FLAG \
       -e GOOGLE_APPLICATION_CREDENTIALS=/gcp/creds.json \
       -v $HOME/.config/gcloud/application_default_credentials.json:/gcp/creds.json:ro \
       -v $PWD/server/templates/custom_dc/$CUSTOM_DIR:/workspace/server/templates/custom_dc/$CUSTOM_DIR \
@@ -229,25 +293,27 @@ run_service() {
   # Custom-built image
   if [ -n "$IMAGE" ]; then
     log_notice "Starting Docker services container with custom image '${IMAGE}'..."
-    docker run -it \
+    docker run $RUN_FLAGS \
     --env-file "$ENV_FILE" \
     -p 8080:8080 \
-    -e DEBUG=true \
+    $DEBUG_FLAG \
+    "${CREDS_ARGS[@]}" \
     -v $INPUT_DIR:$INPUT_DIR \
     -v $OUTPUT_DIR:$OUTPUT_DIR \
     -v $PWD/server/templates/custom_dc/$CUSTOM_DIR:/workspace/server/templates/custom_dc/$CUSTOM_DIR \
     -v $PWD/static/custom_dc/$CUSTOM_DIR:/workspace/static/custom_dc/$CUSTOM_DIR \
       "$IMAGE"
   # Data Commons-released images
-  else 
+  else
     if [ "$RELEASE" == "latest" ]; then
      docker pull gcr.io/datcom-ci/datacommons-services:latest
     fi
     log_notice "Starting Docker services container with '${RELEASE}' release..."
-    docker run -it \
+    docker run $RUN_FLAGS \
     --env-file "$ENV_FILE" \
     -p 8080:8080 \
-    -e DEBUG=true \
+    $DEBUG_FLAG \
+    "${CREDS_ARGS[@]}" \
     -v $INPUT_DIR:$INPUT_DIR \
     -v $OUTPUT_DIR:$OUTPUT_DIR \
     -v $PWD/server/templates/custom_dc/$CUSTOM_DIR:/workspace/server/templates/custom_dc/$CUSTOM_DIR \
@@ -305,6 +371,7 @@ ACTIONS="run"
 CONTAINER="all"
 RELEASE="stable"
 SCHEMA_UPDATE=false
+DETACH=false
 IMAGE=""
 PACKAGE=""
 
@@ -416,6 +483,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     -s | --schema_update)
       SCHEMA_UPDATE=true
+      shift
+      ;;
+    -D | --detach)
+      DETACH=true
       shift
       ;;
     -p | --package | --package=*)

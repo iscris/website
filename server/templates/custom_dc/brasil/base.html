@@ -58,15 +58,21 @@ For more details, please see https://docs.datacommons.org/custom_dc/custom_ui.ht
   <title>{{ title }} - {{NAME}}</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" href="/custom_dc/brasil/favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;600&family=Roboto&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href={{url_for('static', filename='css/core.min.css', t=config['VERSION'])}}>
+  <link rel="stylesheet" href="/custom_dc/brasil/header.css?v={{ config['VERSION'] }}">
+  <link rel="stylesheet" href="/custom_dc/brasil/footer.css?v={{ config['VERSION'] }}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
   {% block head %}
   {% endblock %}
-  <link href="{{ OVERRIDE_CSS_PATH }}" rel="stylesheet">
+  <link href="{{ OVERRIDE_CSS_PATH }}?v={{ config['VERSION'] }}" rel="stylesheet">
+  <script src={{url_for('static', filename='runtime.js', t=config['VERSION'])}} async></script>
+  <script src={{url_for('static', filename='vendors.js', t=config['VERSION'])}} async></script>
   <script src={{url_for('static', filename='queryStore.js', t=config['VERSION'])}} async></script>
   <script src={{url_for('static', filename='base.js', t=config['VERSION'])}} async></script>
+  <script src="/custom_dc/brasil/header.js?v={{ config['VERSION'] }}" defer></script>
 </head>
 
 <body>
@@ -94,15 +100,23 @@ For more details, please see https://docs.datacommons.org/custom_dc/custom_ui.ht
 {% include 'metadata/labels.html' %}
 {% include 'metadata/routes.html' %}
 
+  {#- Transitional shims: the currently-deployed webpack bundle still
+      calls ReactDOM.render(HeaderApp|FooterApp, #main-header|#main-footer).
+      main.ts has been updated to remove those calls, but until the
+      services image is rebuilt the shipped bundle will crash without
+      these elements. Once rebuilt, these hidden divs can be deleted. -#}
+  <div id="main-header" hidden></div>
+  <div id="main-footer" hidden></div>
+
   <div id="main">
-    <header id="main-header">
-    </header>
+    {% include 'custom_dc/brasil/partials/_header.html' %}
 
     <main id="{{ main_id }}" class="main-content">
       {% block content %}
       {% endblock %}
     </main>
 
+    {% include 'custom_dc/brasil/partials/_footer.html' %}
   </div>
   {% block footer %}
   {% endblock %}

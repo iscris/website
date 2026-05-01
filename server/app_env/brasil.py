@@ -19,7 +19,7 @@ from server.app_env import local
 
 class Config(_base.Config):
   CUSTOM = True
-  NAME = "Custom Data Commons"
+  NAME = "Brazil Data Commons"
   OVERRIDE_CSS_PATH = '/custom_dc/brasil/overrides.css'
   LOGO_PATH = "/custom_dc/brasil/logo.svg"
   MIN_STAT_VAR_GEO_COVERAGE = 1

@@ -26,6 +26,15 @@
     "AdministrativeArea4": []
   },
   "DEFAULT_OVERRIDES": {
+    "country/BRA": {
+      "Country": [
+        "BrazilianRegion",
+        "AdministrativeArea1",
+        "AdministrativeArea2"
+      ],
+      "BrazilianRegion": ["AdministrativeArea1", "AdministrativeArea2"],
+      "AdministrativeArea1": ["AdministrativeArea2"]
+    },
     "country/USA": {
       "Country": ["State", "County"],
       "State": ["County", "City", "Town", "Village"],
@@ -104,7 +113,12 @@
       "AdministrativeArea2": ["AdministrativeArea2"]
     },
     "country/BRA": {
-      "Country": ["AdministrativeArea1", "AdministrativeArea2"],
+      "Country": [
+        "BrazilianRegion",
+        "AdministrativeArea1",
+        "AdministrativeArea2"
+      ],
+      "BrazilianRegion": ["AdministrativeArea1", "AdministrativeArea2"],
       "State": ["AdministrativeArea2"],
       "AdministrativeArea1": ["AdministrativeArea2"],
       "AdministrativeArea2": ["AdministrativeArea2"]

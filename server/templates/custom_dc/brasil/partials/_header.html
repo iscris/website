@@ -1,0 +1,89 @@
+{#-
+  Brazil Data Commons — shared site header.
+  Rendered server-side from HEADER_MENU_DATA (parsed header.json). Included
+  by base.html and (indirectly) by homepage.html so every page gets the
+  same vanilla custom header. Interactions live in /custom_dc/brasil/header.js.
+-#}
+
+<a class="skip-link" href="#{{ main_id or 'main' }}">Skip to main content</a>
+
+<header class="site-header" data-scroll-progress="0">
+  <div class="site-header-inner">
+    <a class="site-brand" href="/" aria-label="Brazil Data Commons home">
+      <span>Brazil Data Commons</span>
+    </a>
+
+    {% if page_id == 'page-homepage' %}
+    <form class="site-search" role="search" action="/explore" method="get">
+      <label class="visually-hidden" for="site-search-input">Search Brazil Data Commons</label>
+      <span class="site-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-.7.7l.27.28v.79l5 5 1.49-1.49-5-5zm-6 0A4.5 4.5 0 1 1 14 9.5 4.5 4.5 0 0 1 9.5 14z"/>
+        </svg>
+      </span>
+      <input id="site-search-input" type="search" name="q" placeholder="Search Brazil Data Commons" autocomplete="off">
+    </form>
+    {% endif %}
+
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="primary-nav">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav id="primary-nav" class="site-nav" aria-label="Primary">
+      <ul class="site-menu">
+        {% for section in HEADER_MENU_DATA %}
+          {%- set groups = section.get('primarySectionGroups') or [] -%}
+          {%- if groups %}
+        <li class="has-dropdown">
+          <button type="button" class="menu-trigger" data-panel="{{ section.id }}" aria-expanded="false" aria-controls="mega-panel-{{ section.id }}" aria-haspopup="true">{{ section.label }} <span class="chevron" aria-hidden="true">&#9662;</span></button>
+          <ul class="dropdown">
+            {%- for group in groups -%}
+              {%- for item in group['items'] %}
+            <li><a href="{{ item.url }}"{% if item.url.startswith('http') %} target="_blank" rel="noopener"{% endif %}>{{ item.title }}</a></li>
+              {%- endfor -%}
+            {%- endfor %}
+          </ul>
+        </li>
+          {%- else %}
+        <li><a href="{{ section.url or '#' }}" class="menu-link">{{ section.label }}</a></li>
+          {%- endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div class="nav-backdrop" aria-hidden="true"></div>
+  </div>
+
+  {#- Shared full-width dropdown panel (desktop). One container, swapped
+      content per clicked top-level trigger. Mobile hides this and falls
+      back to the per-item .dropdown accordion above. -#}
+  <div class="mega-menu" id="mega-menu" aria-hidden="true">
+    {% for section in HEADER_MENU_DATA %}
+      {%- set groups = section.get('primarySectionGroups') or [] -%}
+      {%- if groups %}
+    <div class="mega-panel" id="mega-panel-{{ section.id }}" data-panel="{{ section.id }}" role="region" aria-label="{{ section.label }}" hidden>
+      <div class="mega-panel-inner">
+        <div class="mega-intro">
+          <h3>{{ section.label }}</h3>
+          {%- if section.introduction and section.introduction.description %}
+          <p>{{ section.introduction.description }}</p>
+          {%- endif %}
+        </div>
+        <div class="mega-primary{% if groups|length == 1 %} mega-primary--single{% endif %}">
+          {% for group in groups %}
+          <ul class="mega-group">
+            {%- for item in group['items'] %}
+            <li><a href="{{ item.url }}"{% if item.url.startswith('http') %} target="_blank" rel="noopener"{% endif %}>
+              <span class="mega-item-title">{{ item.title }}</span>
+              <span class="mega-item-desc">{{ item.description }}</span>
+            </a></li>
+            {%- endfor %}
+          </ul>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+      {%- endif %}
+    {% endfor %}
+  </div>
+</header>

@@ -442,7 +442,12 @@ def load_fallback_feature_flags(environment: str):
 
   if environment in testing_environments:
     env_to_use = 'autopush'
-  elif environment == 'custom_test':
+  elif environment in ('custom_test', 'brasil'):
+    # dc-brasil patch: the 'brasil' env is a CUSTOM=True app_env (see
+    # server/app_env/brasil.py), so feature flags should come from custom.json
+    # rather than falling through to production.json (which has VAI-powered
+    # stat-var search enabled — an endpoint only accessible from inside
+    # Google's mixer infrastructure).
     env_to_use = 'custom'
   elif environment in environments_with_local_files:
     env_to_use = environment

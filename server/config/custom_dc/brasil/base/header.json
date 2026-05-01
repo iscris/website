@@ -1,0 +1,122 @@
+[
+  {
+    "id": "tools",
+    "label": "Tools",
+    "ariaLabel": "Show exploration tools",
+    "introduction": {
+      "description": "Explore a variety of tools to visualize, analyze, and interact with the Brazil Data Commons knowledge graph"
+    },
+    "primarySectionGroups": [
+      {
+        "id": "tools-0",
+        "items": [
+          {
+            "title": "Knowledge Graph",
+            "url": "/browser/",
+            "description": "Explore what data is available and understand the graph structure"
+          },
+          {
+            "title": "Statistical Variable Explorer",
+            "url": "/tools/statvar",
+            "description": "Explore statistical variable details including metadata and observations"
+          },
+          {
+            "title": "Data Download Tool",
+            "url": "/tools/download",
+            "description": "Download data for selected statistical variables"
+          }
+        ]
+      },
+      {
+        "id": "tools-1",
+        "items": [
+          {
+            "title": "Map Explorer",
+            "url": "/tools/visualization#visType=map",
+            "description": "Study how a selected statistical variable can vary across geographic regions"
+          },
+          {
+            "title": "Scatter Plot Explorer",
+            "url": "/tools/visualization#visType=scatter",
+            "description": "Visualize the correlation between two statistical variables"
+          },
+          {
+            "title": "Timelines Explorer",
+            "url": "/tools/visualization#visType=timeline",
+            "description": "See trends over time for selected statistical variables"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "docs",
+    "label": "Documentation",
+    "ariaLabel": "Show documentation links",
+    "introduction": {
+      "description": "Access tutorials, guides, and API references for Data Commons"
+    },
+    "primarySectionGroups": [
+      {
+        "id": "docs-0",
+        "items": [
+          {
+            "title": "Docs",
+            "url": "https://docs.datacommons.org",
+            "description": "Learn how to access and visualize Data Commons data"
+          },
+          {
+            "title": "API",
+            "url": "https://docs.datacommons.org/api",
+            "description": "Access Data Commons data programmatically using REST and Python APIs"
+          }
+        ]
+      },
+      {
+        "id": "docs-1",
+        "items": [
+          {
+            "title": "Tutorials",
+            "url": "https://docs.datacommons.org/tutorials",
+            "description": "Analysis examples in Google Colab notebooks written in Python"
+          },
+          {
+            "title": "Contributions",
+            "url": "https://docs.google.com/document/d/1wY8WkqnZTdMC0VLSuy3LmVjOsNuik1VEPIo-YE5E4Qs/edit?usp=sharing",
+            "description": "Contribute data, tools, or educational materials to Data Commons"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "about",
+    "label": "About",
+    "ariaLabel": "Show about links",
+    "introduction": {
+      "description": "Learn more about Brazil Data Commons"
+    },
+    "primarySectionGroups": [
+      {
+        "id": "about-0",
+        "items": [
+          {
+            "title": "About Brazil Data Commons",
+            "url": "/about",
+            "description": "Learn about the project, its goals, and how to contribute"
+          },
+          {
+            "title": "FAQ",
+            "url": "/faq",
+            "description": "Frequently asked questions about Brazil Data Commons"
+          },
+          {
+            "title": "Feedback",
+            "url": "/feedback",
+            "description": "Share your experience or report issues"
+          }
+        ]
+      }
+    ]
+  }
+]

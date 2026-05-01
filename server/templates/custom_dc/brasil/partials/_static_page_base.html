@@ -1,0 +1,50 @@
+{#
+ Copyright 2025 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+#}
+
+{#-
+ Intermediate template for simple static pages (about, faq, feedback…).
+
+ Renders a hero strip + body wrapper using the shared `static-pages-base.css`
+ and lets each page bring its own stylesheet via the `page_css` block.
+
+ Pages that extend this template should:
+   - set `title`, `main_id`, `page_id` (as for BASE_HTML)
+   - override `hero` with the heading + optional `.static-page-lead`
+   - override `page_body` with the page's main content
+   - override `page_css` with their own per-page stylesheet link(s)
+   - optionally set `body_class` to add modifiers to `.static-page-body`
+       (e.g. `static-page-body__centered`)
+-#}
+
+{%- extends BASE_HTML -%}
+
+{% block head %}
+<link rel="stylesheet" href={{url_for('static', filename='css/static.min.css', t=config['VERSION'])}}>
+<link rel="stylesheet" href="/custom_dc/brasil/static-pages-base.css?v={{ config['VERSION'] }}">
+{% block page_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<header class="static-page-hero">
+  <div class="static-page-hero-inner">
+    {% block hero %}{% endblock %}
+  </div>
+</header>
+
+<div class="static-page-body {% block body_class %}{% endblock %}">
+  {% block page_body %}{% endblock %}
+</div>
+{% endblock %}

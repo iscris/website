@@ -108,11 +108,18 @@ RUN npm --prefix /workspace/packages/web-components ci --omit=dev \
     && npm --prefix /workspace/packages/client ci \
     && npm --prefix /workspace/static ci --omit=dev
 
-# Build static assets.
-COPY packages/. ./packages/
+# Build web-components sub-package (cached unless its sources change).
+COPY packages/web-components/. ./packages/web-components/
+RUN npm --prefix /workspace/packages/web-components run build
+
+# Build client sub-package (cached unless its sources change).
+COPY packages/client/. ./packages/client/
+RUN npm --prefix /workspace/packages/client run build
+
+# Build static assets (cached unless static/ sources change; sub-packages already built).
 COPY static/. ./static/
 WORKDIR /workspace/static
-RUN npm run-script build
+RUN npx webpack --mode=production --config webpack.config.js
 
 
 # #### Stage 4: Download base dc model and embeddings from GCS. ####

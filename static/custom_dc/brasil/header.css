@@ -1,0 +1,621 @@
+/**
+ * Brazil Data Commons — site header stylesheet
+ *
+ * Loaded on every page (from base.html). Contains the design tokens the
+ * custom header depends on plus all .site-header / .site-menu / .mega-menu /
+ * .site-search / .menu-toggle / .nav-backdrop rules. Hero/sections/footer
+ * live in homepage.css.
+ */
+
+/* -------------------------------------------------------------- *
+ * Design tokens (shared by header.css and homepage.css)
+ * -------------------------------------------------------------- */
+
+:root {
+  --brand-blue: #3583c0;
+  --brand-blue-dark: #0c569c;
+  --brand-blue-light: #5fb1e5;
+  --brand-navy: #073654;
+  --brand-navy-alt: #294969;
+
+  --section-mint: #e8f2f5;
+  --section-text: #0d0952;
+
+  --body-text: #1b1d21;
+  --muted-text: #5a6470;
+
+  --link-color: var(--brand-navy);
+  --link-hover: var(--brand-navy-alt);
+
+  --header-height: 64px;
+  --header-height-lg: 72px;
+
+  --max-content-width: 1200px;
+  --gutter: clamp(1rem, 3vw, 1.5rem);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.12);
+
+  --font-sans: "Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --transition-fast: 150ms ease;
+  --transition: 250ms ease;
+}
+
+/* -------------------------------------------------------------- *
+ * Accessibility helpers used by the header
+ * -------------------------------------------------------------- */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  padding: 0.5rem 1rem;
+  background: var(--brand-navy);
+  color: #fff;
+  z-index: 1000;
+}
+.skip-link:focus { left: 1rem; top: 1rem; color: #fff; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* -------------------------------------------------------------- *
+ * Header chrome
+ * -------------------------------------------------------------- */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--header-height);
+  background-color: rgba(255, 255, 255, var(--scroll-progress, 0));
+  box-shadow: 0 2px 12px rgba(0, 0, 0, calc(var(--scroll-progress, 0) * 0.08));
+  /* Identity baseline so the saturate/blur applied by .scrolled /
+     .is-menu-open interpolates instead of popping on. Without this
+     the filter snaps in while the background is still semi-transparent,
+     super-saturating the hero behind and producing a color flash
+     mid-transition. */
+  backdrop-filter: saturate(100%) blur(0);
+  -webkit-backdrop-filter: saturate(100%) blur(0);
+  transition:
+    background-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    backdrop-filter var(--transition-fast),
+    -webkit-backdrop-filter var(--transition-fast);
+  font-family: var(--font-sans);
+}
+
+/* Non-homepage pages: the custom header always sits on top of white
+   page content (no blue hero behind it), so lock it into the white
+   "scrolled" look by default. The JS scroll-progress logic is gated
+   to id=page-homepage in header.js, so --scroll-progress stays at its
+   default 0 here — we just start from a solid background instead. */
+html:not(#page-homepage) .site-header {
+  background-color: #ffffff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+html:not(#page-homepage) .site-header .site-brand,
+html:not(#page-homepage) .site-header .menu-trigger,
+html:not(#page-homepage) .site-header .menu-link {
+  color: var(--brand-navy-alt);
+}
+html:not(#page-homepage) .site-header .menu-trigger:hover,
+html:not(#page-homepage) .site-header .menu-link:hover {
+  color: var(--brand-blue);
+}
+html:not(#page-homepage) .site-header .menu-toggle span {
+  background-color: var(--brand-navy-alt);
+}
+html:not(#page-homepage) .site-header .site-search {
+  background-color: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+html:not(#page-homepage) .site-header .site-search:focus-within {
+  background-color: #ffffff;
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgba(53, 131, 192, 0.15);
+}
+html:not(#page-homepage) .site-header .site-search-icon { color: var(--brand-navy-alt); }
+html:not(#page-homepage) .site-header .site-search input { color: var(--brand-navy); }
+html:not(#page-homepage) .site-header .site-search input::placeholder { color: rgba(13, 27, 37, 0.5); }
+
+.site-header-inner {
+  height: 100%;
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(0.5rem, 2vw, 1.5rem);
+}
+.site-brand { grid-column: 1; grid-row: 1; }
+.site-search { grid-column: 2; grid-row: 1; justify-self: stretch; }
+.menu-toggle { grid-column: 3; grid-row: 1; display: none; }
+.site-nav { grid-column: 3; grid-row: 1; }
+
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-weight: 600;
+  font-size: 1.0625rem;
+  color: #ffffff;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.site-brand img {
+  width: 32px;
+  height: 32px;
+  transition: filter var(--transition);
+}
+.site-brand:hover { color: #ffffff; text-decoration: none; }
+
+.site-nav {
+  display: flex;
+  align-items: center;
+}
+
+.site-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.site-menu > li {
+  position: relative;
+}
+
+.menu-trigger,
+.menu-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  transition: color var(--transition), background-color var(--transition-fast);
+}
+.menu-trigger:hover,
+.menu-link:hover,
+.menu-trigger:focus-visible,
+.menu-link:focus-visible {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  text-decoration: none;
+}
+.chevron {
+  font-size: 0.7em;
+  opacity: 0.7;
+  transform: translateY(-1px);
+}
+
+/* Per-item dropdown (mobile accordion source). Desktop uses the shared
+   mega-menu below the header; see the .mega-menu section. */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 240px;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  z-index: 110;
+}
+.dropdown li a {
+  display: block;
+  padding: 0.625rem 1rem;
+  color: var(--brand-navy);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+.dropdown li a:hover,
+.dropdown li a:focus-visible {
+  background-color: var(--section-mint);
+  color: var(--brand-blue);
+}
+
+@media (min-width: 768px) {
+  .dropdown {
+    display: none;
+  }
+}
+
+/* Scrolled header (homepage only, via JS --scroll-progress): white bg, dark text */
+.site-header.scrolled {
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: saturate(180%) blur(8px);
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+}
+.site-header.scrolled .site-brand,
+.site-header.scrolled .menu-trigger,
+.site-header.scrolled .menu-link {
+  color: var(--brand-navy-alt);
+}
+.site-header.scrolled .menu-trigger:hover,
+.site-header.scrolled .menu-link:hover {
+  color: var(--brand-blue);
+}
+
+/* -------------------------------------------------------------- *
+ * Search bar in header (pill)
+ * -------------------------------------------------------------- */
+
+.site-search {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: none;
+  padding: 0.25rem 0.625rem 0.25rem 0.5rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  transition: background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
+}
+.site-search:focus-within {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.site-search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: rgba(255, 255, 255, 0.9);
+  flex-shrink: 0;
+}
+
+.site-search input {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  padding: 0 0.25rem;
+  font: inherit;
+  font-size: 0.9375rem;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+.site-search input::placeholder { color: rgba(255, 255, 255, 0.75); }
+.site-search input::-webkit-search-cancel-button { cursor: pointer; }
+
+.site-header.scrolled .site-search {
+  background-color: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+.site-header.scrolled .site-search:focus-within {
+  background-color: #ffffff;
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgba(53, 131, 192, 0.15);
+}
+.site-header.scrolled .site-search-icon { color: var(--brand-navy-alt); }
+.site-header.scrolled .site-search input { color: var(--brand-navy); }
+.site-header.scrolled .site-search input::placeholder { color: rgba(13, 27, 37, 0.5); }
+
+/* -------------------------------------------------------------- *
+ * Mobile menu
+ * -------------------------------------------------------------- */
+
+.menu-toggle {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 110;
+}
+.menu-toggle span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  margin: 4px 0;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+.site-header.scrolled .menu-toggle span {
+  background-color: var(--brand-navy-alt);
+}
+
+.nav-backdrop {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .menu-toggle { display: block; }
+
+  /* Two-row header so the search stays visible on mobile. */
+  .site-header {
+    height: auto;
+  }
+  .site-header-inner {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: var(--header-height) auto;
+    padding-top: 0;
+    padding-bottom: 0.75rem;
+    row-gap: 0.25rem;
+  }
+  .site-brand { grid-column: 1; grid-row: 1; }
+  .menu-toggle { grid-column: 2; grid-row: 1; }
+  .site-search {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    max-width: 100%;
+    justify-self: stretch;
+  }
+  .site-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(320px, 85vw);
+    background: #ffffff;
+    box-shadow: var(--shadow-lg);
+    transform: translateX(100%);
+    transition: transform var(--transition);
+    padding: calc(var(--header-height) + 1rem) 1.25rem 2rem;
+    overflow-y: auto;
+    z-index: 105;
+  }
+  .site-nav.is-open { transform: translateX(0); }
+
+  .nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(13, 27, 37, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition);
+    z-index: 100;
+  }
+  .site-nav.is-open ~ .nav-backdrop,
+  .site-header:has(.site-nav.is-open) .nav-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .site-menu {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.25rem;
+  }
+  .site-menu > li { width: 100%; }
+
+  .menu-trigger,
+  .menu-link {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.875rem 1rem;
+    color: var(--brand-navy);
+    font-size: 1rem;
+  }
+
+  .dropdown {
+    position: static;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    box-shadow: none;
+    background: transparent;
+    padding: 0 0 0 1rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height var(--transition);
+  }
+  .has-dropdown.open > .dropdown {
+    max-height: 500px;
+  }
+  .has-dropdown > .menu-trigger .chevron {
+    transition: transform var(--transition);
+  }
+  .has-dropdown.open > .menu-trigger .chevron {
+    transform: rotate(180deg);
+  }
+  .dropdown li a {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.9375rem;
+  }
+}
+
+/* -------------------------------------------------------------- *
+ * Shared full-width mega-menu (desktop only)
+ * -------------------------------------------------------------- */
+
+.mega-menu {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  max-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height 0.35s ease, box-shadow 0.2s ease;
+  z-index: 95;
+}
+.mega-menu.is-open {
+  max-height: 540px;
+  pointer-events: auto;
+  border-top: 1px solid rgba(13, 27, 37, 0.06);
+}
+
+.mega-panel[hidden] { display: none; }
+
+.mega-panel-inner {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 2rem var(--gutter) 2.25rem;
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) 2fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+.mega-intro h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--brand-navy);
+  margin: 0 0 0.5rem;
+}
+.mega-intro p {
+  font-size: 0.9375rem;
+  color: var(--muted-text);
+  line-height: 1.5;
+  margin: 0;
+  max-width: 32ch;
+}
+
+.mega-primary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem 1.5rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid rgba(13, 27, 37, 0.08);
+}
+.mega-primary--single {
+  grid-template-columns: 1fr;
+}
+
+.mega-group {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mega-group li {
+  margin: 0;
+}
+.mega-group a {
+  display: block;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--brand-navy);
+  text-decoration: none;
+  transition: background-color var(--transition-fast);
+}
+.mega-group a:hover,
+.mega-group a:focus-visible {
+  background-color: var(--section-mint);
+  color: var(--brand-navy);
+}
+
+.mega-item-title {
+  display: block;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--brand-navy);
+  margin-bottom: 2px;
+}
+.mega-item-desc {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: rgba(13, 27, 37, 0.7);
+  line-height: 1.4;
+}
+
+/* Chevron rotates while its trigger's panel is open. */
+.menu-trigger .chevron {
+  transition: transform var(--transition-fast);
+}
+.menu-trigger[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}
+
+/* When the mega-menu is open over a still-transparent header (hero
+   at the top of the page), force the header to its scrolled look so
+   white text doesn't sit over the white panel. Matches .scrolled.
+   Also applies when the user focuses the search input, so typing
+   happens against a readable white header. */
+.site-header.is-menu-open,
+.site-header:has(.site-search:focus-within) {
+  background-color: rgba(255, 255, 255, 0.98);
+  backdrop-filter: saturate(180%) blur(8px);
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+}
+.site-header.is-menu-open .site-brand,
+.site-header.is-menu-open .menu-trigger,
+.site-header.is-menu-open .menu-link,
+.site-header:has(.site-search:focus-within) .site-brand,
+.site-header:has(.site-search:focus-within) .menu-trigger,
+.site-header:has(.site-search:focus-within) .menu-link {
+  color: var(--brand-navy-alt);
+}
+.site-header.is-menu-open .menu-trigger:hover,
+.site-header.is-menu-open .menu-link:hover,
+.site-header:has(.site-search:focus-within) .menu-trigger:hover,
+.site-header:has(.site-search:focus-within) .menu-link:hover {
+  color: var(--brand-blue);
+}
+.site-header.is-menu-open .menu-trigger[aria-expanded="true"] {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--brand-blue);
+}
+.site-header.is-menu-open .site-search,
+.site-header:has(.site-search:focus-within) .site-search {
+  background-color: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+.site-header.is-menu-open .site-search-icon,
+.site-header:has(.site-search:focus-within) .site-search-icon {
+  color: var(--brand-navy-alt);
+}
+.site-header.is-menu-open .site-search input,
+.site-header:has(.site-search:focus-within) .site-search input {
+  color: var(--brand-navy);
+}
+.site-header.is-menu-open .site-search input::placeholder,
+.site-header:has(.site-search:focus-within) .site-search input::placeholder {
+  color: rgba(13, 27, 37, 0.5);
+}
+.site-header.is-menu-open .menu-toggle span,
+.site-header:has(.site-search:focus-within) .menu-toggle span {
+  background-color: var(--brand-navy-alt);
+}
+
+/* Mobile: the mega-menu is irrelevant; the per-item .dropdown
+   accordion inside the slide-out .site-nav drawer handles this. */
+@media (max-width: 767px) {
+  .mega-menu { display: none; }
+}

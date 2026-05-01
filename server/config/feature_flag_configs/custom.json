@@ -6,18 +6,6 @@
     "description": "Feature flag to enable place autocomplete."
   },
   {
-    "name": "biomed_nl",
-    "enabled": false,
-    "owner": "calinc",
-    "description": "Enables the biomed_nl experimental features by registering the experiments/biomed_nl api and html routes."
-  },
-  {
-    "name": "data_overview",
-    "enabled": false,
-    "owner": "nick-next",
-    "description": "Enables the data_overview/<place> routes."
-  },
-  {
     "name": "enable_chart_hyperlink",
     "enabled": false,
     "owner": "gmechali",
@@ -70,12 +58,6 @@
     "enabled": true,
     "owner": "nick-next",
     "description": "Feature flag to show the complete metadata modal. If not set, the older modal will be used as a fallback."
-  },
-  {
-    "name": "new_ranking_page",
-    "enabled": false,
-    "owner": "juliawu",
-    "description": "Enables the new ranking page UI"
   },
   {
     "name": "page_overview_ga",

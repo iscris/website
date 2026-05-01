@@ -359,15 +359,19 @@ export async function getStatVarInfo(dcids: string[]): Promise<any> {
   if (!dcids || dcids.length === 0) {
     return Promise.resolve({});
   }
+  // POST the dcids in the body so large selections (e.g. the Map Explorer's
+  // stat-var chooser) don't exceed gunicorn's ~4KB request-line limit.
+  // Feature flags stay in the URL — they're few and small.
   const flags = extractFlagsToPropagate(window.location.href);
-  const params = {
-    dcids,
-    ...Object.fromEntries(flags.entries()),
-  };
-  return axios.get("/api/variable/info", {
-    params,
-    paramsSerializer: stringifyFn,
-  });
+  const flagParams = Object.fromEntries(flags.entries());
+  return axios.post(
+    "/api/variable/info",
+    { dcids },
+    {
+      params: flagParams,
+      paramsSerializer: stringifyFn,
+    }
+  );
 }
 
 export function replaceQueryWithSelection(

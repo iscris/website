@@ -124,6 +124,9 @@ export class StatVarHierarchySearch extends React.Component<
           }
         }}
       >
+        {this.props.searchLabel && (
+          <div className="title">{this.props.searchLabel}</div>
+        )}
         <div className="search-input-container" tabIndex={-1}>
           <input
             className="statvar-search-input form-control"
@@ -203,9 +206,6 @@ export class StatVarHierarchySearch extends React.Component<
             </div>
           )}
         </div>
-        {this.props.searchLabel && (
-          <div className="title">{this.props.searchLabel}</div>
-        )}
       </div>
     );
   }

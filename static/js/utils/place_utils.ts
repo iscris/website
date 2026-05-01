@@ -41,6 +41,9 @@ const SAMPLE_PLACES_ALL = {
 
 export const ENCLOSED_PLACE_TYPE_NAMES = {
   [IPCC_PLACE_50_TYPE_DCID]: "30-minute grid",
+  BrazilianRegion: "Regions",
+  AdministrativeArea1: "States",
+  AdministrativeArea2: "Cities",
 };
 
 /**

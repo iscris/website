@@ -1,10 +1,10 @@
 [
   {
-    "name": "Alabama",
-    "dcid": "geoId/01"
+    "name": "São Paulo",
+    "dcid": "wikidataId/Q175"
   },
   {
-    "name": "Alaska",
-    "dcid": "geoId/02"
+    "name": "Minas Gerais",
+    "dcid": "wikidataId/Q39109"
   }
 ]

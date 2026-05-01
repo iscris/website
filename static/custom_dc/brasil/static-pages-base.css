@@ -1,0 +1,81 @@
+/**
+ * Brazil Data Commons — shared chrome for simple static pages.
+ *
+ * Loaded via the `_static_page_base.html` intermediate template.
+ * Provides only what is structurally common across every static page:
+ * the main-content margin reset, the hero strip, and the body wrapper.
+ * Page-specific content styles live in their own per-page CSS file
+ * (about.css, faq.css, feedback.css, …). Design tokens come from
+ * header.css :root.
+ */
+
+/* -------------------------------------------------------------- *
+ * Layout reset — neutralise the framework's default
+ *   .main-content { margin: 3rem auto 6rem }
+ * so the hero can sit flush against the header. #main already
+ * reserves header space via padding-top.
+ * -------------------------------------------------------------- */
+
+.main-content:has(> .static-page-hero) {
+  margin: 0;
+}
+
+/* -------------------------------------------------------------- *
+ * Page hero — title strip at the top of every static page
+ * -------------------------------------------------------------- */
+
+.static-page-hero {
+  color: var(--brand-navy);
+  padding: 0.5rem;
+}
+
+.static-page-hero-inner {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.static-page-hero h1 {
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--brand-navy);
+}
+
+.static-page-lead {
+  font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 60ch;
+  margin: 0;
+}
+
+.static-page-lead a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.static-page-lead a:hover { color: rgba(255, 255, 255, 0.85); }
+
+/* -------------------------------------------------------------- *
+ * Body wrapper — narrow column optimised for reading.
+ * Page-specific styles (sections, cards, accordions) live in
+ * each page's own stylesheet.
+ * -------------------------------------------------------------- */
+
+.static-page-body {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 1.5rem 2rem;
+  color: var(--body-text);
+  font-family: var(--font-sans);
+}
+
+.static-page-body__centered {
+  margin: 0 auto;
+}

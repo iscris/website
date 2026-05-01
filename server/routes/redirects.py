@@ -67,11 +67,6 @@ def nlnext():
   return redirect(url_for('explore.page'), code=302)
 
 
-@bp.route('/datasets')
-def datasets():
-  return redirect(url_for('static.data'), code=301)
-
-
 @bp.route('/documentation')
 def documentation():
   return redirect('https://docs.datacommons.org/', code=302)
@@ -84,7 +79,7 @@ def colab():
 
 @bp.route('/getinvolved')
 def get_involved():
-  return redirect('https://docs.datacommons.org/contributing/', code=302)
+  return redirect('https://docs.google.com/document/d/1wY8WkqnZTdMC0VLSuy3LmVjOsNuik1VEPIo-YE5E4Qs/edit?usp=sharing', code=302)
 
 
 @bp.route('/tools/stat-var')

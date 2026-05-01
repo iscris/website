@@ -1,0 +1,66 @@
+/**
+ * Brazil Data Commons — Feedback page styles.
+ * Loaded only by feedback.html, on top of static-pages-base.css.
+ */
+
+/* -------------------------------------------------------------- *
+ * Hero stays pinned to the top; the card area below it grows to
+ * fill the remaining viewport height and self-centres its child
+ * (the shared `.static-page-body` already sets
+ * `justify-content: center`).
+ *
+ * `#main` already reserves `var(--header-height)` of padding-top
+ * for the fixed header. On mobile the header is two-row, so
+ * reserve a bit more.
+ * -------------------------------------------------------------- */
+
+#page-feedback .main-content {
+  min-height: calc(100dvh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+}
+
+#page-feedback .static-page-body {
+  flex: 1;
+}
+
+@media (max-width: 767px) {
+  #page-feedback .main-content {
+    min-height: calc(100dvh - var(--header-height) - 3.5rem);
+  }
+}
+
+.feedback-card {
+  background-color: var(--section-mint);
+  border-radius: var(--radius-lg);
+  padding: clamp(2rem, 5vw, 3rem);
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.feedback-card p {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--section-text);
+  margin: 0 0 1.5rem;
+}
+
+.feedback-cta {
+  display: inline-block;
+  background-color: var(--brand-navy);
+  color: #ffffff;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color var(--transition), transform var(--transition-fast);
+}
+
+.feedback-cta:hover {
+  background-color: var(--brand-navy-alt);
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-1px);
+}

@@ -1,0 +1,87 @@
+/**
+ * Brazil Data Commons — About page styles.
+ * Loaded only by about.html, on top of static-pages-base.css.
+ *
+ * The page is long-form prose, so it gets a narrow reading column,
+ * generous vertical rhythm, and responsive heading sizes.
+ */
+
+#page-about {
+  /* Reading-column cap shared by the h1 and every section, so
+   * their left edges line up with each other and with the header
+   * brand sitting in the same 1200px page band above. */
+  --about-column: 760px;
+}
+
+/* -------------------------------------------------------------- *
+ * Hero — a touch more vertical room than the shared default.
+ * The shared `.static-page-hero-inner` already provides the
+ * 1200px-centered band; we just cap the h1 inside it so the
+ * title pins to the band's left edge.
+ * -------------------------------------------------------------- */
+
+#page-about .static-page-hero {
+  padding: clamp(2rem, 5vw, 3rem) 0 clamp(1rem, 3vw, 1.75rem);
+}
+
+#page-about .static-page-hero h1 {
+  max-width: var(--about-column);
+}
+
+/* -------------------------------------------------------------- *
+ * Body — same 1200px page band as the header. Sections inside
+ * are capped at the reading width and pinned to the left
+ * (`align-items: flex-start` overrides the flex column's
+ * default `stretch`).
+ * -------------------------------------------------------------- */
+
+#page-about .static-page-body {
+  max-width: var(--max-content-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter) clamp(3rem, 7vw, 5rem);
+  gap: clamp(2rem, 4vw, 3rem);
+  align-items: flex-start;
+}
+
+/* -------------------------------------------------------------- *
+ * Sections — heading + prose
+ * -------------------------------------------------------------- */
+
+.static-page-section {
+  width: 100%;
+  max-width: var(--about-column);
+  /* Compensate for the fixed header when the user lands on
+   * #contribute (or any other in-page anchor we add later). */
+  scroll-margin-top: calc(var(--header-height) + 1rem);
+}
+
+.static-page-section h2 {
+  font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.25;
+  color: var(--brand-navy);
+  margin: 0 0 0.75rem;
+}
+
+.static-page-section p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: var(--body-text);
+  margin: 0 0 0.875rem;
+}
+
+.static-page-section p:last-child {
+  margin-bottom: 0;
+}
+
+.static-page-section a {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.static-page-section a:hover {
+  color: var(--link-hover);
+}

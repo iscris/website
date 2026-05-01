@@ -157,7 +157,25 @@ class PlaceSearchBar extends Component<PlaceSearchBarPropType> {
             </span>
           </div>
         );
-        ReactDOM.render(result, container);
+        // dc-brasil diagnostic: catch + log if the container is stale, so we
+        // can prove whether this is the React #200 site.
+        try {
+          if (!(container instanceof HTMLElement) || !container.isConnected) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              "[dc-brasil] place_search_bar: pac-container not a connected HTMLElement; skipping injection",
+              { container }
+            );
+            return;
+          }
+          ReactDOM.render(result, container);
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error(
+            "[dc-brasil] place_search_bar: ReactDOM.render into pac-container failed",
+            e
+          );
+        }
       }
       // It's unreliable to listen to the ENTER event here. Handling of
       // these manually added results are done in getPlaceAndRender.

@@ -29,7 +29,7 @@ import { hideTooltip, showTooltip, SV_HIERARCHY_SECTION_ID } from "./util";
 const BULLET_POINT_HTML = <span className="bullet">&#8226;</span>;
 const DOWN_ARROW_HTML = <i className="material-icons">arrow_drop_down</i>;
 const RIGHT_ARROW_HTML = <i className="material-icons">arrow_right</i>;
-const TOOLTIP_TOP_OFFSET = 10;
+const TOOLTIP_TOP_OFFSET = 6;
 
 export interface StatVarHierarchyNodeHeaderPropType {
   childrenStatVarCount: number;
@@ -94,8 +94,12 @@ export class StatVarHierarchyNodeHeader extends React.Component<StatVarHierarchy
     const containerClientRect = (
       d3.select(`#${SV_HIERARCHY_SECTION_ID}`).node() as HTMLElement
     ).getBoundingClientRect();
-    const top = e.pageY - containerClientRect.y + TOOLTIP_TOP_OFFSET;
-    const left = e.pageX - containerClientRect.x;
+    // Use clientX/Y (viewport-relative) to match getBoundingClientRect's
+    // viewport-relative coordinates. pageX/Y includes window.scrollY,
+    // which would push the absolutely-positioned tooltip off the page
+    // and grow document scrollHeight on every hover.
+    const top = e.clientY - containerClientRect.y + TOOLTIP_TOP_OFFSET;
+    const left = e.clientX - containerClientRect.x;
     const tooltipHtml = `<b>${this.props.title}</b></br><span>dcid: ${this.props.nodeDcid}</span>`;
     showTooltip(tooltipHtml, { left, top });
   };

@@ -15,6 +15,7 @@
 
 import asyncio
 import collections
+from concurrent.futures import ThreadPoolExecutor
 import json
 import logging
 from typing import Dict, List
@@ -204,6 +205,34 @@ def obs_series(entities, variables, facet_ids=None):
   return post(url, req)
 
 
+# dc-brasil patch: upstream api.datacommons.org rejects /v2/observation series
+# calls that would compute more than ~5000 concurrent series in one shot with:
+#   "Stop processing large number of concurrent observation series: N"
+# For custom DCs with large AdministrativeArea2 (e.g. 5,570 Brazilian
+# municipalities), the default single-call behavior fails. When a child_type
+# expression resolves to more entities than this threshold, first enumerate
+# the children via /v2/node, then issue sequential /v2/observation calls with
+# explicit entity.dcids and merge the responses into the same shape callers
+# expect.
+_OBS_SERIES_WITHIN_BATCH_SIZE = 500
+
+
+def _merge_obs_series_response(acc: Dict, batch: Dict) -> Dict:
+  """Merge two raw /v2/observation responses (shape: {byVariable, facets})."""
+  if not acc:
+    return dict(batch) if batch else {}
+  acc_by_var = acc.setdefault("byVariable", {})
+  for var, var_data in (batch.get("byVariable") or {}).items():
+    acc_by_entity = acc_by_var.setdefault(var,
+                                          {}).setdefault("byEntity", {})
+    for entity, entity_data in (var_data.get("byEntity") or {}).items():
+      acc_by_entity[entity] = entity_data
+  acc_facets = acc.setdefault("facets", {})
+  for fid, fdata in (batch.get("facets") or {}).items():
+    acc_facets.setdefault(fid, fdata)
+  return acc
+
+
 def obs_series_within(parent_entity, child_type, variables, facet_ids=None):
   """Gets the statistical variable series for child places of a certain place
       type contained in a parent place.
@@ -213,22 +242,52 @@ def obs_series_within(parent_entity, child_type, variables, facet_ids=None):
         child_type: Type of child places as a string.
         variables: List of statistical variable DCIDs each as a string.
     """
+  variables = sorted(variables)
   url = get_service_url("/v2/observation")
-  req = {
-      "select": ["date", "value", "variable", "entity"],
-      "entity": {
-          "expression":
-              "{0}<-containedInPlace+{{typeOf:{1}}}".format(
-                  parent_entity, child_type)
-      },
-      "variable": {
-          "dcids": sorted(variables)
-      },
-  }
-  if facet_ids:
-    req["filter"] = {"facetIds": facet_ids}
 
-  return post(url, req)
+  # Resolve children first so we can batch when the set is large.
+  children_resp = v2node(
+      [parent_entity], f"<-containedInPlace+{{typeOf:{child_type}}}")
+  arcs = children_resp.get("data", {}).get(parent_entity, {}).get("arcs", {})
+  nodes = arcs.get("containedInPlace+", {}).get("nodes", []) or []
+  child_dcids = [n["dcid"] for n in nodes if "dcid" in n]
+
+  def _request(entity_section):
+    req = {
+        "select": ["date", "value", "variable", "entity"],
+        "entity": entity_section,
+        "variable": {
+            "dcids": variables
+        },
+    }
+    if facet_ids:
+      req["filter"] = {"facetIds": facet_ids}
+    return post(url, req)
+
+  # Nothing to batch on — preserve prior behavior (expression path, which also
+  # handles zero-child cases and surfaces upstream errors as before).
+  if not child_dcids:
+    return _request({
+        "expression":
+            f"{parent_entity}<-containedInPlace+{{typeOf:{child_type}}}"
+    })
+
+  if len(child_dcids) <= _OBS_SERIES_WITHIN_BATCH_SIZE:
+    return _request({"dcids": sorted(child_dcids)})
+
+  batches = [
+      child_dcids[i:i + _OBS_SERIES_WITHIN_BATCH_SIZE]
+      for i in range(0, len(child_dcids), _OBS_SERIES_WITHIN_BATCH_SIZE)
+  ]
+  logging.info(
+      "[obs_series_within] batching %d entities × %d variables into %d chunks "
+      "of %d (parent=%s child_type=%s)", len(child_dcids), len(variables),
+      len(batches), _OBS_SERIES_WITHIN_BATCH_SIZE, parent_entity, child_type)
+  merged: Dict = {}
+  for batch in batches:
+    merged = _merge_obs_series_response(
+        merged, _request({"dcids": sorted(batch)}))
+  return merged
 
 
 def series_facet(entities, variables):
@@ -296,6 +355,14 @@ def v2observation(select, entity, variable, filter=None):
   return post(url, req)
 
 
+# dc-brasil patch: upstream api.datacommons.org /v2/node returns 503 when
+# asked for many entities at once (e.g. geoJsonCoordinates for 5,572 Brazilian
+# municipalities in a single call). Split large requests into chunks and
+# merge — benefits every caller including fetch.property_values /
+# shared.names / place_api.get_display_name.
+_V2NODE_BATCH_SIZE = 300
+
+
 def v2node(nodes, prop):
   """Wrapper to call V2 Node REST API.
 
@@ -303,13 +370,35 @@ def v2node(nodes, prop):
         nodes: A list of node dcids.
         prop: The property to query for.
     """
-  return post(
-      get_service_url("/v2/node"),
-      {
-          "nodes": sorted(nodes),
-          "property": prop,
-      },
-  )
+  nodes_sorted = sorted(nodes)
+  url = get_service_url("/v2/node")
+
+  if len(nodes_sorted) <= _V2NODE_BATCH_SIZE:
+    return post(url, {"nodes": nodes_sorted, "property": prop})
+
+  batches = [
+      nodes_sorted[i:i + _V2NODE_BATCH_SIZE]
+      for i in range(0, len(nodes_sorted), _V2NODE_BATCH_SIZE)
+  ]
+  logging.info(
+      "[v2node] batching %d nodes prop=%s into %d chunks of %d",
+      len(nodes_sorted), prop, len(batches), _V2NODE_BATCH_SIZE)
+
+  # Preserve Flask app context in worker threads (needed for DC_API_KEY).
+  app = current_app._get_current_object()
+
+  def _call(batch):
+    with app.app_context():
+      return post(url, {"nodes": batch, "property": prop})
+
+  merged: Dict = {}
+  with ThreadPoolExecutor(max_workers=4) as ex:
+    for f in [ex.submit(_call, b) for b in batches]:
+      try:
+        _merge_v2node_response(merged, f.result() or {})
+      except Exception as e:
+        logging.warning("[v2node] batch failed, skipping: %s", e)
+  return merged
 
 
 def _merge_v2node_response(result, paged_response):
@@ -389,14 +478,54 @@ def get_variable_group_info(nodes: List[str],
   return post(url, req_dict)
 
 
+# dc-brasil patch: /bulk/info/variable computes placeTypeSummary via a local
+# SQL aggregation (GetStatVarSummaries) that scales with the number of
+# entities × places-per-variable. On this 46M-row SQLite DB, ~10 variables
+# takes ~16s and batches of 40+ hit the mixer's 60s SQL timeout. When the
+# stat-var tree section mounts, it can request >100 vars in one shot — that
+# previously hung indefinitely. Batch + parallel calls keep each mixer
+# request well under the timeout and the total wall-clock reasonable.
+_VARIABLE_INFO_BATCH_SIZE = 10
+_VARIABLE_INFO_PARALLEL = 6
+
+
 def variable_info(nodes: List[str]) -> Dict:
   """Gets the stat var node information."""
+  if not nodes:
+    return {"data": []}
   if is_feature_enabled(USE_V2_API, app=current_app, request=request):
     url = get_service_url("/v2/bulk/info/variable")
   else:
     url = get_service_url("/v1/bulk/info/variable")
-  req_dict = {"nodes": nodes}
-  return post(url, req_dict)
+
+  if len(nodes) <= _VARIABLE_INFO_BATCH_SIZE:
+    return post(url, {"nodes": nodes})
+
+  batches = [
+      nodes[i:i + _VARIABLE_INFO_BATCH_SIZE]
+      for i in range(0, len(nodes), _VARIABLE_INFO_BATCH_SIZE)
+  ]
+  logging.info(
+      "[variable_info] batching %d nodes into %d chunks of %d (parallel=%d)",
+      len(nodes), len(batches), _VARIABLE_INFO_BATCH_SIZE,
+      _VARIABLE_INFO_PARALLEL)
+
+  # Worker threads need access to app.config (for DC_API_KEY), so propagate
+  # the Flask app context into each thread.
+  app = current_app._get_current_object()
+
+  def _call_batch(batch):
+    with app.app_context():
+      return post(url, {"nodes": batch})
+
+  merged: Dict = {"data": []}
+  with ThreadPoolExecutor(max_workers=_VARIABLE_INFO_PARALLEL) as ex:
+    for f in [ex.submit(_call_batch, b) for b in batches]:
+      try:
+        merged["data"].extend((f.result() or {}).get("data", []))
+      except Exception as e:
+        logging.warning("[variable_info] batch failed, skipping: %s", e)
+  return merged
 
 
 def get_variable_ancestors(dcid: str):

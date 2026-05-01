@@ -1,0 +1,80 @@
+/**
+ * Brazil Data Commons — site footer stylesheet
+ * Loaded on every page from base.html. Tokens come from header.css :root.
+ */
+
+/* Sticky footer: on short pages (e.g. /browser/) the footer would float
+   mid-viewport without this. Make the #main wrapper a flex column that
+   fills the viewport, and let <main> grow to absorb the slack so the
+   footer lands at the bottom. */
+html, body { min-height: 100vh; }
+body { margin: 0; }
+#main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+#main > main.main-content {
+  flex: 1 0 auto;
+}
+#main > .site-footer {
+  flex-shrink: 0;
+}
+
+.site-footer {
+  background-color: var(--brand-navy);
+  color: #ffffff;
+  padding: 1rem 0;
+  font-family: var(--font-sans);
+}
+
+.site-footer-inner {
+  max-width: none;
+  margin: 0;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+.footer-brand strong {
+  color: #ffffff;
+  font-weight: 600;
+}
+.footer-brand a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.footer-brand a:hover { color: var(--brand-blue-light); }
+
+.footer-links {
+  display: flex;
+  gap: 1.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.footer-links a {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.footer-links a:hover { color: #ffffff; }
+
+@media (max-width: 600px) {
+  .site-footer-inner {
+    justify-content: flex-start;
+  }
+}

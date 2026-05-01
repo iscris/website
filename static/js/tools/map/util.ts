@@ -239,6 +239,7 @@ export const ALL_MAP_PLACE_TYPES = {
   County: "",
   AdministrativeArea1: "",
   AdministrativeArea2: "",
+  BrazilianRegion: "",
   EurostatNUTS1: "",
   EurostatNUTS2: "",
   EurostatNUTS3: "",

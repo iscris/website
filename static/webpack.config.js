@@ -19,10 +19,7 @@ const readline = require("readline");
 const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 const FixStyleOnlyEntriesPlugin = require("webpack-remove-empty-scripts");
-const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
-
-const smp = new SpeedMeasurePlugin();
 
 const config = {
   entry: {
@@ -38,24 +35,10 @@ const config = {
       __dirname + "/js/tools/stat_var/stat_var.ts",
       __dirname + "/css/tools/stat_var.scss",
     ],
-    dev: [__dirname + "/js/dev.ts", __dirname + "/css/dev.scss"],
-    subject_page_tiles: [
-      __dirname + "/js/dev/subject_page_tiles.tsx",
-      __dirname + "/css/dev.scss",
-    ],
-    datagemma: [
-      __dirname + "/js/apps/datagemma/main.ts",
-      __dirname + "/css/datagemma.scss",
-    ],
-    biomed_nl: [
-      __dirname + "/js/apps/biomed_nl/main.ts",
-      __dirname + "/css/biomed_nl.scss",
-    ],
     timeline: [
       __dirname + "/js/tools/timeline/timeline.ts",
       __dirname + "/css/tools/timeline.scss",
     ],
-    mcf_playground: __dirname + "/js/mcf_playground.js",
     queryStore: path.resolve(__dirname, "js/shared/stores/query_store.ts"),
     base: [__dirname + "/js/apps/base/main.ts", __dirname + "/css/core.scss"],
     place_landing: [
@@ -78,21 +61,6 @@ const config = {
       __dirname + "/js/apps/explore/main.ts",
       __dirname + "/css/explore.scss",
     ],
-    eval_embeddings: [
-      __dirname + "/js/apps/eval_embeddings/main.ts",
-      __dirname + "/css/eval_embeddings.scss",
-    ],
-    eval_retrieval_generation: [
-      __dirname + "/js/apps/eval_retrieval_generation/main.ts",
-      __dirname + "/css/eval_retrieval_generation.scss",
-    ],
-    eval_retrieval_generation_sxs: [
-      __dirname + "/js/apps/eval_retrieval_generation/sxs/main.ts",
-    ],
-    old_ranking: [
-      __dirname + "/js/ranking/old_ranking.ts",
-      __dirname + "/css/old_ranking.scss",
-    ],
     ranking: [
       __dirname + "/js/ranking/ranking.ts",
       __dirname + "/css/ranking.scss",
@@ -114,49 +82,6 @@ const config = {
       __dirname + "/js/tools/download/download.ts",
       __dirname + "/css/tools/download.scss",
     ],
-    import_wizard: [
-      __dirname + "/js/import_wizard/import_wizard.ts",
-      __dirname + "/css/import_wizard.scss",
-    ],
-    import_wizard2: [
-      __dirname + "/js/import_wizard2/import_wizard.ts",
-      __dirname + "/css/import_wizard2.scss",
-    ],
-    about: [
-      __dirname + "/js/apps/about/main.ts",
-      __dirname + "/css/about.scss",
-    ],
-    admin: [__dirname + "/js/admin/main.ts", __dirname + "/css/admin.scss"],
-    build: [
-      __dirname + "/js/apps/build/main.ts",
-      __dirname + "/css/build.scss",
-    ],
-    data: [__dirname + "/js/apps/data/main.ts"],
-    data_overview: [
-      __dirname + "/js/apps/data_overview/main.ts",
-      __dirname + "/css/data_overview.scss",
-    ],
-    disaster_dashboard: [
-      __dirname + "/js/apps/disaster_dashboard/main.ts",
-      __dirname + "/css/disaster_dashboard.scss",
-    ],
-    event: [
-      __dirname + "/js/apps/event/main.ts",
-      __dirname + "/css/event.scss",
-    ],
-    sustainability: [
-      __dirname + "/js/apps/sustainability/main.ts",
-      __dirname + "/css/sustainability.scss",
-    ],
-    datacommons: [__dirname + "/library/index.ts"],
-    homepage: [
-      __dirname + "/js/apps/homepage/main.ts",
-      __dirname + "/css/homepage.scss",
-    ],
-    homepage_custom_dc: [
-      __dirname + "/js/apps/homepage/main_custom_dc.ts",
-      __dirname + "/css/homepage.scss",
-    ],
     visualization: [
       __dirname + "/js/apps/visualization/main.ts",
       __dirname + "/css/tools/visualization.scss",
@@ -165,6 +90,19 @@ const config = {
   output: {
     path: path.resolve(__dirname, "../") + "/server/dist",
     filename: "[name].js",
+  },
+  optimization: {
+    runtimeChunk: "single",
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+          enforce: true,
+        },
+      },
+    },
   },
   resolve: {
     extensions: [".js", ".ts", ".tsx"],
@@ -175,6 +113,9 @@ const config = {
         test: /\.(ts|tsx)$/,
         loader: "ts-loader",
         exclude: /node_modules/,
+        options: {
+          transpileOnly: true,
+        },
       },
       {
         test: /\.(css|scss)$/,
@@ -266,5 +207,9 @@ module.exports = (env, argv) => {
     }
   }
 
-  return argv.mode === "development" ? config : smp.wrap(config);
+  if (argv.mode !== "development" && process.env.WEBPACK_SPEED_MEASURE === "true") {
+    const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+    return new SpeedMeasurePlugin().wrap(config);
+  }
+  return config;
 };

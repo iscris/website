@@ -30,10 +30,18 @@ def get_variable_path():
   return json.dumps([dcid] + dc.get_variable_ancestors(dcid)), 200
 
 
-@bp.route('/info')
+@bp.route('/info', methods=['GET', 'POST'])
 def variable_info():
-  """Gets the info of a list of stat var."""
-  dcids = request.args.getlist("dcids")
+  """Gets the info of a list of stat var.
+
+  Accepts GET with repeated `dcids` query params, or POST with a JSON body
+  `{"dcids": [...]}`. POST avoids the ~4KB request-line limit when querying
+  many stat vars at once (e.g. the Map Explorer's stat-var chooser).
+  """
+  if request.method == 'POST':
+    dcids = (request.get_json(silent=True) or {}).get("dcids", [])
+  else:
+    dcids = request.args.getlist("dcids")
   data = dc.variable_info(dcids).get("data", [])
   result = {}
   for item in data:

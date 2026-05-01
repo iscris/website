@@ -30,9 +30,6 @@ import google.cloud.logging
 from server.lib import topic_cache
 import server.lib.cache as lib_cache
 import server.lib.config as lib_config
-from server.lib.disaster_dashboard import get_disaster_dashboard_data
-from server.lib.feature_flags import BIOMED_NL_FEATURE_FLAG
-from server.lib.feature_flags import DATA_OVERVIEW_FEATURE_FLAG
 from server.lib.feature_flags import ENABLE_GEMINI_3_FLASH
 from server.lib.feature_flags import ENABLE_NL_AGENT_DETECTOR
 from server.lib.feature_flags import is_feature_enabled
@@ -93,21 +90,8 @@ def _get_api_key(env_keys=[], gcp_project='', gcp_path=''):
   return ''
 
 
-def _enable_datagemma() -> bool:
-  """Returns whether to enable the DataGemma UI for this instance. 
-  This UI should only be enabled for internal instances.
-  """
-  return os.environ.get('ENABLE_DATAGEMMA') == 'true'
-
-
 def register_routes_base_dc(app):
   # apply the blueprints for all apps
-  from server.routes.dev import html as dev_html
-  app.register_blueprint(dev_html.bp)
-
-  from server.routes.import_wizard import html as import_wizard_html
-  app.register_blueprint(import_wizard_html.bp)
-
   from server.routes.place_list import html as place_list_html
   app.register_blueprint(place_list_html.bp)
 
@@ -126,81 +110,6 @@ def register_routes_base_dc(app):
 
   from server.routes.disaster import api as disaster_api
   app.register_blueprint(disaster_api.bp)
-
-
-def register_routes_disasters(app):
-  # Install blueprints specific to disasters
-  from server.routes.disaster import html as disaster_html
-  app.register_blueprint(disaster_html.bp)
-
-  from server.routes.event import html as event_html
-  app.register_blueprint(event_html.bp)
-
-  if app.config['TEST']:
-    return
-
-  # load disaster dashboard configs
-  app.config[
-      'DISASTER_DASHBOARD_CONFIG'] = libutil.get_disaster_dashboard_config()
-  app.config['DISASTER_EVENT_CONFIG'] = libutil.get_disaster_event_config()
-
-  if app.config['INTEGRATION']:
-    return
-
-  # load disaster json data
-  if os.environ.get('ENABLE_DISASTER_JSON') == 'true':
-    disaster_dashboard_data = get_disaster_dashboard_data(
-        app.config['GCS_BUCKET'])
-    app.config['DISASTER_DASHBOARD_DATA'] = disaster_dashboard_data
-
-
-def register_routes_sustainability(app):
-  # Install blueprint for sustainability page
-  from server.routes.sustainability import html as sustainability_html
-  app.register_blueprint(sustainability_html.bp)
-  if app.config['TEST']:
-    return
-  # load sustainability config
-  app.config[
-      'DISASTER_SUSTAINABILITY_CONFIG'] = libutil.get_disaster_sustainability_config(
-      )
-
-
-def register_routes_datagemma(app, cfg):
-  # Set the gemini api key
-  app.config['GEMINI_API_KEY'] = _get_api_key(['GEMINI_API_KEY'],
-                                              cfg.SECRET_PROJECT,
-                                              'gemini-api-key')
-  # Set the DC NL api key
-  app.config['DC_NL_API_KEY'] = _get_api_key(['DC_NL_API_KEY'],
-                                             cfg.SECRET_PROJECT,
-                                             'dc-nl-api-key')
-  if not app.config['GEMINI_API_KEY'] or not app.config['DC_NL_API_KEY']:
-    app.logger.warning('DataGemma routes not registered due to missing API key')
-    return
-
-  # Install blueprint for DataGemma page
-  from server.routes.dev_datagemma import api as dev_datagemma_api
-  app.register_blueprint(dev_datagemma_api.bp)
-  from server.routes.dev_datagemma import html as dev_datagemma_html
-  app.register_blueprint(dev_datagemma_html.bp)
-
-
-def register_routes_biomed_nl(app, cfg):
-  # Set the gemini api key
-  app.config['BIOMED_NL_GEMINI_API_KEY'] = _get_api_key(
-      ['BIOMED_NL_GEMINI_API_KEY'], cfg.SECRET_PROJECT,
-      'biomed-nl-gemini-api-key')
-
-  if not app.config['BIOMED_NL_GEMINI_API_KEY']:
-    app.logger.warning('Biomed NL routes not registered due to missing API key')
-    return
-
-  # Install blueprint for experimental biomed NL page
-  from server.routes.experiments.biomed_nl import api as biomed_nl_api
-  app.register_blueprint(biomed_nl_api.bp)
-  from server.routes.experiments.biomed_nl import html as biomed_nl_html
-  app.register_blueprint(biomed_nl_html.bp)
 
 
 def register_routes_common(app):
@@ -351,22 +260,6 @@ def create_app(nl_root=DEFAULT_NL_ROOT):
 
   register_routes_common(app)
   register_routes_base_dc(app)
-
-  if cfg.SHOW_DISASTER:
-    register_routes_disasters(app)
-
-  if cfg.SHOW_SUSTAINABILITY:
-    register_routes_sustainability(app)
-
-  if _enable_datagemma():
-    register_routes_datagemma(app, cfg)
-
-  if is_feature_enabled(BIOMED_NL_FEATURE_FLAG, app):
-    register_routes_biomed_nl(app, cfg)
-
-  if is_feature_enabled(DATA_OVERVIEW_FEATURE_FLAG, app):
-    from server.routes.data_overview import html as data_overview_html
-    app.register_blueprint(data_overview_html.bp)
 
   # Load topic page config
   topic_page_configs = libutil.get_topic_page_config()
@@ -536,6 +429,7 @@ def create_app(nl_root=DEFAULT_NL_ROOT):
 
     common_variables = {
         'HEADER_MENU': json.dumps(header_menu),
+        'HEADER_MENU_DATA': header_menu,
         'FOOTER_MENU': json.dumps(footer_menu),
     }
     locale_variable = dict(locale=get_locale())

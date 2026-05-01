@@ -27,13 +27,10 @@ FEATURE_FLAG_URL_OVERRIDE_DISABLE_PARAM = 'disable_feature'
 
 # Feature Flags
 AUTOCOMPLETE_FEATURE_FLAG = 'autocomplete'
-BIOMED_NL_FEATURE_FLAG = 'biomed_nl'
-DATA_OVERVIEW_FEATURE_FLAG = 'data_overview'
 STANDARDIZED_VIS_TOOL_FEATURE_FLAG = 'standardized_vis_tool'
 VAI_FOR_STATVAR_SEARCH_FEATURE_FLAG = 'vai_for_statvar_search'
 ENABLE_STAT_VAR_AUTOCOMPLETE = 'enable_stat_var_autocomplete'
 ENABLE_NL_AGENT_DETECTOR = 'enable_nl_agent_detector'
-NEW_RANKING_PAGE = 'new_ranking_page'
 ENABLE_GEMINI_3_FLASH = 'enable_gemini_3_flash'
 USE_V2_API = 'use_v2_api'
 

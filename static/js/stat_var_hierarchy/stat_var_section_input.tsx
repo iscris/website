@@ -35,7 +35,7 @@ import {
 import { ALL_MAP_PLACE_TYPES } from "../tools/map/util";
 import { hideTooltip, showTooltip, SV_HIERARCHY_SECTION_ID } from "./util";
 
-const TOOLTIP_TOP_OFFSET = 10;
+const TOOLTIP_TOP_OFFSET = 6;
 const STATE_OR_EQUIVALENT = "State or equivalent";
 const COUNTY_OR_EQUIVALENT = "County or equivalent";
 const CITY_OR_EQUIVALENT = "City or equivalent";
@@ -268,8 +268,12 @@ export class StatVarSectionInput extends React.Component<
       const containerClientRect = (
         d3.select(`#${SV_HIERARCHY_SECTION_ID}`).node() as HTMLElement
       ).getBoundingClientRect();
-      const top = e.pageY - containerClientRect.y + TOOLTIP_TOP_OFFSET;
-      const left = e.pageX - containerClientRect.x;
+      // Use clientX/Y (viewport-relative) to match getBoundingClientRect.
+      // pageX/Y includes window.scrollY, which would push the absolutely
+      // positioned tooltip off the page and grow document scrollHeight
+      // on every hover.
+      const top = e.clientY - containerClientRect.y + TOOLTIP_TOP_OFFSET;
+      const left = e.clientX - containerClientRect.x;
       showTooltip(html, { left, top });
     };
 }

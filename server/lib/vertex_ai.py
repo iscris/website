@@ -16,6 +16,7 @@
 
 import logging
 import threading
+from dataclasses import dataclass, field
 
 from google.cloud import discoveryengine_v1 as discoveryengine
 
@@ -24,6 +25,15 @@ logger = logging.getLogger(__name__)
 # Use a global variable to hold the client, initialized to None.
 _vai_client = None
 _vai_client_lock = threading.Lock()
+
+
+@dataclass
+class _EmptySearchResult:
+  """SearchPager-shaped sentinel returned when the search call fails.
+  Mirrors the two attributes the caller reads (results, next_page_token) so
+  callers can degrade gracefully without an AttributeError."""
+  results: list = field(default_factory=list)
+  next_page_token: str | None = None
 
 
 def _get_search_client():
@@ -58,8 +68,7 @@ def search(
       relevance_threshold=relevance_threshold)
 
   try:
-    page_result = client.search(search_request)
-    return page_result
+    return client.search(search_request)
   except Exception as e:
-    logger.error("SearchRequest failed for query '%s': %s", query, e)
-    return []
+    logger.exception("SearchRequest failed for query '%s': %s", query, e)
+    return _EmptySearchResult()

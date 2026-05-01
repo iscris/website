@@ -21,6 +21,29 @@ import { loadLocaleData } from "../../i18n/i18n";
 import { getLocaleFromUrl } from "../../utils/url_utils";
 import { AppWithContext } from "./app";
 
+// dc-brasil diagnostic: log full stack of any unhandled promise rejection so
+// we can see WHERE the React #200 error is thrown (stack is already
+// symbolicated by file+line in source even though the bundle is minified —
+// minified names appear only below the webpack module boundary).
+window.addEventListener("unhandledrejection", (ev) => {
+  // eslint-disable-next-line no-console
+  console.error(
+    "[dc-brasil] unhandledrejection",
+    ev.reason && (ev.reason.stack || ev.reason.message || ev.reason),
+    ev.reason
+  );
+});
+window.addEventListener("error", (ev) => {
+  // eslint-disable-next-line no-console
+  console.error(
+    "[dc-brasil] window.error",
+    ev.error && (ev.error.stack || ev.error.message || ev.error),
+    ev.message,
+    ev.filename,
+    ev.lineno
+  );
+});
+
 window.addEventListener("load", (): void => {
   const locale = getLocaleFromUrl();
   loadLocaleData(locale, [
